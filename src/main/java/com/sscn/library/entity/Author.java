@@ -12,13 +12,14 @@ import java.util.List;
 @Entity
 public class Author implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+
     @Column(nullable = false)
     private String firstName;
 
     @Column(nullable = false)
     private String lastName;
-
-    @JoinTable(name = "BookAuthors")
-    @ManyToMany
-    private List<Book> books;
 }
