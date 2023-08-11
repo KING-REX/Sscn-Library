@@ -20,8 +20,4 @@ public class Author implements Serializable {
 
     @Column(nullable = false)
     private String lastName;
-
-    @JoinTable(name = "BookAuthors")
-    @ManyToMany
-    private List<Book> books;
 }
