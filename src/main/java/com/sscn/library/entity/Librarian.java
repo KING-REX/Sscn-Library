@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @Data
 @Entity
-public class Librarian {
+public class Librarian implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
