@@ -11,9 +11,6 @@ import java.util.List;
 @Data
 @Entity
 public class Author implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Column(nullable = false)
     private String firstName;
