@@ -4,23 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.List;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
 @Entity
-public class Book implements Serializable {
+public class BookReturns {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private String firstName;
+    @JoinColumn(referencedColumnName = "id", nullable = false)
+    private String bookIssued;
 
     @Column(nullable = false)
-    private String lastName;
-
-    @ManyToMany
-    private List<Author> authors;
+    private LocalDate dateCollected;
 }

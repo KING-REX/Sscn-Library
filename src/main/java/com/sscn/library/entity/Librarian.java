@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.List;
-
 @NoArgsConstructor
 @Data
 @Entity
-public class Author implements Serializable {
+public class Librarian {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,7 +19,9 @@ public class Author implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @JoinTable(name = "BookAuthors")
-    @ManyToMany
-    private List<Book> books;
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
 }
