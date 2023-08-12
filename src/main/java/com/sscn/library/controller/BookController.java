@@ -4,6 +4,7 @@ import com.sscn.library.entity.Book;
 import com.sscn.library.service.BookService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,28 +17,48 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/{isbn}")
-    public Book getBookByIsbn(@PathVariable String isbn) {
-        return bookService.getBookByIsbn(isbn);
-    }
-
     @GetMapping
     public List<Book> getBooks() {
         return bookService.getAllBooks();
     }
 
-    @PostMapping
-    public Book addBook(@RequestBody Book book) {
-        return bookService.addBook(book);
+    @GetMapping("/{isbn}")
+    public Book getBookByIsbn(@PathVariable String isbn) {
+        return bookService.getBookByIsbn(isbn);
     }
 
-    @PutMapping
-    public Book updateBook(@RequestBody Book newBook, String bookIsbn) {
+    @GetMapping("/{title}.t")
+    public List<Book> getBooksByTitle(@PathVariable String title) {
+        return bookService.getBooksByTitle(title);
+    }
+
+    @PostMapping
+    public List<Book> addBooks(@RequestBody List<Book> books) {
+        return bookService.addBooks(books);
+    }
+
+    @PutMapping("/{bookIsbn}")
+    public Book updateBook(@RequestBody Book newBook, @PathVariable String bookIsbn) {
         return bookService.updateBook(newBook, bookIsbn);
     }
 
     @DeleteMapping
-    public void deleteBookByIsbn(@RequestBody String isbn) {
+    public void deleteAllBooks() {
+        bookService.deleteAllBooks();
+    }
+
+    @DeleteMapping("/{isbn}")
+    public void deleteBookByIsbn(@PathVariable String isbn) {
         bookService.deleteBookByIsbn(isbn);
+    }
+
+    @DeleteMapping("/{title}.t")
+    public void deleteBooksByTitle(@PathVariable String title) {
+        bookService.deleteBooksByTitle(title);
+    }
+
+    @DeleteMapping("/{date-purchased}.d")
+    public void deleteBooksByDatePurchased(@PathVariable LocalDate datePurchased) {
+        bookService.deleteBooksByDatePurchased(datePurchased);
     }
 }

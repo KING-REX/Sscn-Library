@@ -1,4 +1,4 @@
-package com.debbybytes.plexus.security;
+package com.sscn.library.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,5 +1,6 @@
 package com.sscn.library.repository;
 
+import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,10 +19,11 @@ public interface BookIssuanceRepository extends JpaRepository<BookIssuance, Inte
     boolean existsByIssuedTo(Member issuedTo);
 
     boolean existsByDateIssued(LocalDate dataIssued);
-    boolean existsByDateDue(LocalDate datadue);
+    boolean existsByDateDue(LocalDate dateDue);
 
     boolean existsByReturnStatus(ReturnStatus returnStatus);
 
+    Optional<List<BookIssuance>> findAllByBook(Book book);
     Optional<List<BookIssuance>> findAllByIssuedTo(Member issuedTo);
     Optional<List<BookIssuance>> findAllByDateIssued(LocalDate dateIssued);
     Optional<List<BookIssuance>> findAllByDateDue(LocalDate dateDue);

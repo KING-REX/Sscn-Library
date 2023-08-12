@@ -18,8 +18,18 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public Author getAuthorById(@PathVariable int id) {
+    public Author getAuthorById(@PathVariable Integer id) {
         return authorService.getAuthorById(id);
+    }
+
+    @GetMapping("/{lastName}.l")
+    public List<Author> getAuthorsByLastName(@PathVariable String lastName) {
+        return authorService.getAuthorsByLastName(lastName);
+    }
+
+    @GetMapping("/{firstName}-{lastName}.fl")
+    public List<Author> getAuthorsByFullName(@PathVariable String firstName, @PathVariable String lastName) {
+        return authorService.getAuthorsByFullName(firstName, lastName);
     }
 
     @GetMapping
@@ -28,17 +38,32 @@ public class AuthorController {
     }
 
     @PostMapping
-    public Author addAuthor(@RequestBody Author author) {
-        return authorService.addAuthor(author);
+    public List<Author> addAuthors(@RequestBody List<Author> authors) {
+        return authorService.addAuthors(authors);
     }
 
     @PutMapping
-    public Author updateAuthor(@RequestBody Author newAuthor, int authorId) {
+    public Author updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
         return authorService.updateAuthor(newAuthor, authorId);
     }
 
-    //Prolly post
-//    public addAuthor() {
-//
-//    }
+    @DeleteMapping("/{id}")
+    public void removeAuthorById(@PathVariable Integer id) {
+        authorService.removeAuthorById(id);
+    }
+
+    @DeleteMapping("/{lastName}.l")
+    public void removeAuthorsByLastName(@PathVariable String lastName) {
+        authorService.removeAuthorsByLastName(lastName);
+    }
+
+    @DeleteMapping("/{firstName}-{lastName}.fl")
+    public void removeAuthorsByFullName(@PathVariable String firstName, @PathVariable String lastName) {
+        authorService.removeAuthorsByFullName(firstName, lastName);
+    }
+
+    @DeleteMapping
+    public void removeAllAuthors() {
+        authorService.removeAllAuthors();
+    }
 }

@@ -1,8 +1,7 @@
 package com.sscn.library.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -23,15 +22,15 @@ public class Book implements Serializable {
     private LocalDate datePurchased;
 
     @Column(nullable = false)
-    private int availableCopies;
+    private Integer availableCopies;
 
     @Column(nullable = false)
-    private int totalCopies;
+    private Integer totalCopies;
 
     @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
     private List<Author> authors;
 
-    public Book(String isbn, String title, LocalDate datePurchased, int availableCopies, int totalCopies) {
+    public Book(String isbn, String title, LocalDate datePurchased, Integer availableCopies, Integer totalCopies) {
         this.isbn = isbn;
         this.title = title;
         this.datePurchased = datePurchased;
@@ -40,7 +39,7 @@ public class Book implements Serializable {
         this.authors = new ArrayList<>();
     }
 
-    public Book(String isbn, String title, LocalDate datePurchased, int availableCopies, int totalCopies, List<Author> authors) {
+    public Book(String isbn, String title, LocalDate datePurchased, Integer availableCopies, Integer totalCopies, List<Author> authors) {
         this.isbn = isbn;
         this.title = title;
         this.datePurchased = datePurchased;
@@ -49,51 +48,14 @@ public class Book implements Serializable {
         this.authors = authors;
     }
 
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public LocalDate getDatePurchased() {
-        return datePurchased;
-    }
-
-    public void setDatePurchased(LocalDate datePurchased) {
-        this.datePurchased = datePurchased;
-    }
-
-    public int getAvailableCopies() {
-        return availableCopies;
-    }
-
-    public void setAvailableCopies(int availableCopies) {
-        this.availableCopies = availableCopies;
-    }
-
-    public int getTotalCopies() {
-        return totalCopies;
-    }
-
-    public void setTotalCopies(int totalCopies) {
-        this.totalCopies = totalCopies;
-    }
-
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    @Override
+    public String toString() {
+        return "Book{" +
+                "isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", datePurchased=" + datePurchased +
+                ", availableCopies=" + availableCopies +
+                ", totalCopies=" + totalCopies +
+                '}';
     }
 }
