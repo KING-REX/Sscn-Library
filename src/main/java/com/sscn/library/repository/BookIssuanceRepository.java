@@ -1,11 +1,7 @@
 package com.sscn.library.repository;
 
-import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.Member;
-import com.sscn.library.entity.ReturnStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-
+enum ReturnStatus {
+    BORROWED, RETURNED, OVERDUE
+}
 @Repository
 public interface BookIssuanceRepository extends JpaRepository<BookIssuance, Integer> {
 

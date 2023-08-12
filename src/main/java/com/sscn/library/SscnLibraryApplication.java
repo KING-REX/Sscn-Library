@@ -16,8 +16,9 @@ public class SscnLibraryApplication {
 	@Bean
 	CommandLineRunner runner(AuthorRepository authorRepository) {
 		return args -> {
-//			authorRepository.save(new Author("John", "Doe"));
-//			authorRepository.save(new Author("Lettuce", "Correl"));
+			authorRepository.save(new Author("John", "Doe"));
+			authorRepository.save(new Author("Lettuce", "Correl"));
+			authorRepository.save(new Author("Mary", "Doe"));
 //			Optional<List<Author>> findBlah = authorRepository.findAllByLastName("Doe");
 //			findBlah.ifPresent(a -> System.out.println(a.toString()));
 //			findBlah.ifPresent(System.out::println);

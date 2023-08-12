@@ -18,7 +18,7 @@ public class BookReturns {
     private Book bookIssued;
 
     @JoinColumn(referencedColumnName = "id", nullable = false)
-    private BookIssuance bookIssuanceRecord;
+    private BookIssuance bookIssuance;
 
     @Column(nullable = false)
     private LocalDate dateReturned;

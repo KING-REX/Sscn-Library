@@ -21,9 +21,6 @@ public class Author implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @ManyToMany
-    private List<Book> books;
-
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
