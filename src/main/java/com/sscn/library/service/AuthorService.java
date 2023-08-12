@@ -6,7 +6,9 @@ import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorService {
@@ -31,11 +33,23 @@ public class AuthorService {
     }
 
     public List<Author> getAuthorsByFullName(String firstName, String lastName) {
-        return authorRepository.findAllByFirstNameAndLastName(firstName, lastName).orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+
+        return authorRepository
+                .findAllByFirstNameAndLastName(firstName, lastName)
+                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+
+
+
+        //TODO: Make this method also search in reverse (i.e. ("John", "Doe") should return the same results as ("Doe", "John").
+//        return authorRepository
+//                .findAllByFirstNameAndLastName(firstName, lastName)
+//                .orElse(authorRepository
+//                        .findAllByLastNameAndFirstName(firstName, lastName)
+//                        .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName))));
     }
 
     public Author addAuthor(Author author) {
-        if(authorRepository.existsById(author.getId()))
+        if(author.getId() != null && authorRepository.existsById(author.getId()))
             throw new DuplicateValueException("Author %s already exists.".formatted(author.getId()));
 
         return authorRepository.save(author);
@@ -50,6 +64,8 @@ public class AuthorService {
     public Author updateAuthor(Author newAuthor, Integer authorId) {
         Author oldAuthor = getAuthorById(authorId);
 
+        System.out.println(oldAuthor);
+
         if(newAuthor.getFirstName() != null && !newAuthor.getFirstName().isEmpty())
             oldAuthor.setFirstName(newAuthor.getFirstName());
 
@@ -59,7 +75,7 @@ public class AuthorService {
         if(newAuthor.getBooks() != null && !newAuthor.getBooks().isEmpty())
             oldAuthor.setBooks(newAuthor.getBooks());
 
-        return authorRepository.save(newAuthor);
+        return authorRepository.save(oldAuthor);
     }
 
     public void removeAuthor(Author author) {

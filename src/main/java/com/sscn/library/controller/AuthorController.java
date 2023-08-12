@@ -2,6 +2,7 @@ package com.sscn.library.controller;
 
 
 import com.sscn.library.entity.Author;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.service.AuthorService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,12 @@ public class AuthorController {
         return authorService.getAuthorsByLastName(lastName);
     }
 
-    @GetMapping("/{firstName}-{lastName}.fl")
-    public List<Author> getAuthorsByFullName(@PathVariable String firstName, @PathVariable String lastName) {
-        return authorService.getAuthorsByFullName(firstName, lastName);
+    @GetMapping("/{fullName}.fl")
+    public List<Author> getAuthorsByFullName(@PathVariable String fullName) {
+        String[] names = fullName.split("-");
+        if(names.length > 2)
+            throw new InvalidArgumentException("Syntax for full name is wrong!");
+        return authorService.getAuthorsByFullName(names[0], names[1]);
     }
 
     @GetMapping
@@ -42,7 +46,7 @@ public class AuthorController {
         return authorService.addAuthors(authors);
     }
 
-    @PutMapping
+    @PutMapping("/{authorId}")
     public Author updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
         return authorService.updateAuthor(newAuthor, authorId);
     }
@@ -57,9 +61,12 @@ public class AuthorController {
         authorService.removeAuthorsByLastName(lastName);
     }
 
-    @DeleteMapping("/{firstName}-{lastName}.fl")
-    public void removeAuthorsByFullName(@PathVariable String firstName, @PathVariable String lastName) {
-        authorService.removeAuthorsByFullName(firstName, lastName);
+    @DeleteMapping("/{fullName}.fl")
+    public void removeAuthorsByFullName(@PathVariable String fullName) {
+        String[] names = fullName.split("-");
+        if(names.length > 2)
+            throw new InvalidArgumentException("Syntax for full name is wrong!");
+        authorService.removeAuthorsByFullName(names[0], names[1]);
     }
 
     @DeleteMapping

@@ -24,6 +24,7 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     Optional<Author> findByFirstNameAndLastName(String firstName, String lastName);
     Optional<List<Author>> findAllByFirstNameAndLastName(String firstName, String lastName);
+    Optional<List<Author>> findAllByLastNameAndFirstName(String firstName, String lastName);
     Optional<List<Author>> findAllByLastName(String lastName);
 
 

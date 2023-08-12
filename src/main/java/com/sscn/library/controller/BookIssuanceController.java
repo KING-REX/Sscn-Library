@@ -2,12 +2,11 @@ package com.sscn.library.controller;
 
 import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
+import com.sscn.library.entity.Member;
 import com.sscn.library.service.BookIssuanceService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,10 +34,64 @@ public class BookIssuanceController {
         return bookIssuanceService.getBookIssuancesByBook(book);
     }
 
-    @PostMapping
-    public BookIssuance addBookIssuance(BookIssuance bookIssuance) {
-        return bookIssuanceService.addBookIssuance(bookIssuance);
+    @GetMapping("/{dateIssued}.di")
+    public List<BookIssuance> getBookIssuancesByDateIssued(LocalDate dateIssued) {
+        return bookIssuanceService.getBookIssuancesByDateIssued(dateIssued);
+    }
+
+    @GetMapping("/{dateDue}.dd")
+    public List<BookIssuance> getBookIssuancesByDateDue(LocalDate dateDue) {
+        return bookIssuanceService.getBookIssuancesByDateDue(dateDue);
+    }
+
+    @GetMapping("/{id}.mi")
+    public List<BookIssuance> getBookIssuancesByMemberId(Integer id) {
+        return bookIssuanceService.getBookIssuancesByMemberId(id);
     }
 
 
+    @PostMapping("/member")
+    public List<BookIssuance> getBookIssuancesByMember(@RequestBody Member issuedTo) {
+        return bookIssuanceService.getBookIssuancesByMemberIssuedTo(issuedTo);
+    }
+
+    @PostMapping
+    public List<BookIssuance> addBookIssuances(List<BookIssuance> bookIssuances) {
+        return bookIssuanceService.addBookIssuances(bookIssuances);
+    }
+
+    @PutMapping("/{id}")
+    public BookIssuance updateBookIssuance(BookIssuance newBookIssuance, Integer id) {
+        return bookIssuanceService.updateBookIssuance(newBookIssuance, id);
+    }
+
+    @DeleteMapping
+    public void deleteAllBookIssuances() {
+        bookIssuanceService.deleteAllBookIssuances();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBookIssuanceById(Integer id) {
+        bookIssuanceService.deleteBookIssuanceById(id);
+    }
+
+    @DeleteMapping("/{bookIsbn}")
+    public void deleteBookIssuancesByBookIsbn(String bookIsbn) {
+        bookIssuanceService.deleteBookIssuancesByBookIsbn(bookIsbn);
+    }
+
+    @DeleteMapping("/{dateIssued}.di")
+    public void deleteBookIssuancesByDateIssued(LocalDate dateIssued) {
+        bookIssuanceService.deleteBookIssuancesByDateIssued(dateIssued);
+    }
+
+    @DeleteMapping("/{dateDue}.dd")
+    public void deleteBookIssuancesByDateDue(LocalDate dateDue) {
+        bookIssuanceService.deleteBookIssuancesByDateDue(dateDue);
+    }
+
+    @DeleteMapping("/{id}.mi")
+    public void deleteBookIssuancesByMemberId(Integer id) {
+        bookIssuanceService.deleteBookIssuancesByMemberId(id);
+    }
 }
