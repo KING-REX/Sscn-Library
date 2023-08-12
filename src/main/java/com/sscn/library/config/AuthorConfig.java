@@ -17,6 +17,8 @@ public class AuthorConfig {
             Author mary = new Author("Mary", "Doe");
 
             authorRepository.saveAll(List.of(john, lettuce, mary));
+
+            authorRepository.save(john);
         };
     };
 }

@@ -22,6 +22,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     boolean existsByDatePurchased(LocalDate datePurchased);
 
+    boolean existsByIsbn(String isbn);
+
     Optional<Book> findByTitle(String title);
     Optional<List<Book>> findAllByTitle(String Title);
 
