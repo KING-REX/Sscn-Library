@@ -2,9 +2,9 @@ package com.sscn.library.service;
 
 import com.sscn.library.entity.Author;
 import com.sscn.library.repository.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AuthorService {
 
@@ -17,6 +17,10 @@ public class AuthorService {
 
     public List<Author> getAuthors() {
         return authorRepository.findAll();
+    }
+
+    public Optional<Author> getAuthorById(int id) {
+        return authorRepository.findById(id);
     }
 
 //    getAuthorById();
