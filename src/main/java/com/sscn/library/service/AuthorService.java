@@ -26,6 +26,10 @@ public class AuthorService {
         return authorRepository.findById(id).orElseThrow(() ->  new NotFoundException(String.format("Author with id %s was not found.", id)));
     }
 
+    public List<Author> getAuthorsByLastName(String lastName) {
+        return authorRepository.findAllByLastName(lastName).orElseThrow(() -> new NotFoundException("No author with the name %s exists.".formatted(lastName)));
+    }
+
     public List<Author> getAuthorsByFullName(String firstName, String lastName) {
         return authorRepository.findAllByFirstNameAndLastName(firstName, lastName).orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
     }
@@ -79,10 +83,6 @@ public class AuthorService {
 
     public void removeAllAuthors() {
         authorRepository.deleteAll();
-    }
-
-    public List<Author> getAuthorsByLastName(String lastName) {
-        return authorRepository.findAllByLastName(lastName).orElseThrow(() -> new NotFoundException("No author with the name %s exists.".formatted(lastName)));
     }
 
 }
