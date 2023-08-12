@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -27,6 +28,7 @@ public class Author implements Serializable {
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.books = new ArrayList<>();
     }
 
     @Override

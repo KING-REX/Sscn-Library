@@ -13,8 +13,7 @@ import java.util.List;
 @Entity
 public class Book implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String isbn;
 
     @Column(nullable = false)
     private String title;
