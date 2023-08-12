@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository){
         this.memberRepository = memberRepository;
@@ -20,8 +20,8 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public void addNewMember(Member member){
-        memberRepository.save(member);
+    public Member addNewMember(Member member){
+        return memberRepository.save(member);
     }
 
     public void deleteMemberById(Integer id){
