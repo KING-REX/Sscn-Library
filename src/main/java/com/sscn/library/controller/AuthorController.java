@@ -3,10 +3,7 @@ package com.sscn.library.controller;
 
 import com.sscn.library.entity.Author;
 import com.sscn.library.service.AuthorService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,14 +17,24 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-//    @GetMapping("/{id}")
-//    public Author getAuthorById(@PathVariable int id) {
-//        return authorService.getAuthorById(id);
-//    }
+    @GetMapping("/{id}")
+    public Author getAuthorById(@PathVariable int id) {
+        return authorService.getAuthorById(id);
+    }
 
     @GetMapping
     public List<Author> getAuthors() {
-        return authorService.getAuthors();
+        return authorService.getAllAuthors();
+    }
+
+    @PostMapping
+    public Author addAuthor(@RequestBody Author author) {
+        return authorService.addAuthor(author);
+    }
+
+    @PutMapping
+    public Author updateAuthor(@RequestBody Author newAuthor, int authorId) {
+        return authorService.updateAuthor(newAuthor, authorId);
     }
 
     //Prolly post

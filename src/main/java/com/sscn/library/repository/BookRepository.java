@@ -24,6 +24,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     boolean existsByIsbn(String isbn);
 
+    Optional<Book> findByIsbn(String isbn);
     Optional<Book> findByTitle(String title);
     Optional<List<Book>> findAllByTitle(String Title);
 
@@ -31,4 +32,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
 //    Optional<List<Book>> findAllByAuthor(Author author);              No "author" column in Book. It's "authors"
 //    Optional<List<Book>> findAllByAuthors(ArrayList<Author> authors); Too complex for the JpaRepository and doesn't even make sense pfft!
+
+    void deleteByIsbn(String isbn);
+    void deleteAllByTitle(String title);
 }

@@ -2,10 +2,12 @@ package com.sscn.library.service;
 
 import com.sscn.library.entity.Member;
 import com.sscn.library.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class MemberService {
     private MemberRepository memberRepository;
 
