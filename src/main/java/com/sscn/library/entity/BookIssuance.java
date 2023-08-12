@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-enum ReturnStatus {
-    BORROWED, RETURNED, OVERDUE
-}
-
 @NoArgsConstructor
 @Data
 @Entity

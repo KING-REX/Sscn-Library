@@ -1,9 +1,7 @@
 package com.sscn.library.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +21,20 @@ public class Author implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @JoinTable(name = "BookAuthors")
     @ManyToMany
     private List<Book> books;
+
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

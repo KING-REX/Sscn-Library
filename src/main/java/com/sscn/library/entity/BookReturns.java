@@ -15,8 +15,11 @@ public class BookReturns {
     private int id;
 
     @JoinColumn(referencedColumnName = "id", nullable = false)
-    private String bookIssued;
+    private Book bookIssued;
+
+    @JoinColumn(referencedColumnName = "id", nullable = false)
+    private BookIssuance bookIssuanceRecord;
 
     @Column(nullable = false)
-    private LocalDate dateCollected;
+    private LocalDate dateReturned;
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,11 +17,19 @@ public class Book implements Serializable {
     private int id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String title;
 
     @Column(nullable = false)
-    private String lastName;
+    private LocalDate datePurchased;
+
+    @Column(nullable = false)
+    private int availableCopies;
+
+    @Column(nullable = false)
+    private int totalCopies;
 
     @ManyToMany
     private List<Author> authors;
+
+
 }
