@@ -4,6 +4,8 @@ import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.Member;
 import com.sscn.library.service.BookIssuanceService;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,33 +22,33 @@ public class BookIssuanceController {
     }
 
     @GetMapping
-    public List<BookIssuance> getAllBookIssuances() {
-        return bookIssuanceService.getAllBookIssuances();
+    public ResponseEntity<List<BookIssuance>> getAllBookIssuances() {
+        return ResponseEntity.ok(bookIssuanceService.getAllBookIssuances());
     }
 
     @GetMapping("/{id}")
-    public BookIssuance getBookIssuanceById(int id) {
-        return bookIssuanceService.getBookIssuanceById(id);
+    public ResponseEntity<BookIssuance>  getBookIssuanceById(int id) {
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuanceById(id));
     }
 
     @GetMapping("/{bookIsbn}.i")
-    public List<BookIssuance> getBookIssuancesByBook(Book book) {
-        return bookIssuanceService.getBookIssuancesByBook(book);
+    public ResponseEntity< List<BookIssuance>> getBookIssuancesByBook(Book book) {
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByBook(book));
     }
 
     @GetMapping("/{dateIssued}.di")
-    public List<BookIssuance> getBookIssuancesByDateIssued(LocalDate dateIssued) {
-        return bookIssuanceService.getBookIssuancesByDateIssued(dateIssued);
+    public ResponseEntity<List<BookIssuance>>  getBookIssuancesByDateIssued(LocalDate dateIssued) {
+        return ResponseEntity.ok( bookIssuanceService.getBookIssuancesByDateIssued(dateIssued));
     }
 
     @GetMapping("/{dateDue}.dd")
-    public List<BookIssuance> getBookIssuancesByDateDue(LocalDate dateDue) {
-        return bookIssuanceService.getBookIssuancesByDateDue(dateDue);
+    public ResponseEntity<List<BookIssuance>>  getBookIssuancesByDateDue(LocalDate dateDue) {
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByDateDue(dateDue));
     }
 
     @GetMapping("/{memberId}.mi")
-    public List<BookIssuance> getBookIssuancesByMemberId(Integer memberId) {
-        return bookIssuanceService.getBookIssuancesByMemberId(memberId);
+    public ResponseEntity<List<BookIssuance>>  getBookIssuancesByMemberId(Integer memberId) {
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByMemberId(memberId));
     }
 
 
@@ -56,42 +58,48 @@ public class BookIssuanceController {
 //    }
 
     @PostMapping
-    public List<BookIssuance> addBookIssuances(List<BookIssuance> bookIssuances) {
-        return bookIssuanceService.addBookIssuances(bookIssuances);
+    public ResponseEntity<List<BookIssuance>> addBookIssuances(List<BookIssuance> bookIssuances) {
+        return ResponseEntity.ok(bookIssuanceService.addBookIssuances(bookIssuances));
     }
 
     @PutMapping("/{id}")
-    public BookIssuance updateBookIssuance(BookIssuance newBookIssuance, Integer id) {
-        return bookIssuanceService.updateBookIssuance(newBookIssuance, id);
+    public ResponseEntity<BookIssuance>  updateBookIssuance(BookIssuance newBookIssuance, Integer id) {
+        return ResponseEntity.ok(bookIssuanceService.updateBookIssuance(newBookIssuance, id));
     }
 
     @DeleteMapping
-    public void deleteAllBookIssuances() {
+    public ResponseEntity.BodyBuilder deleteAllBookIssuances() {
         bookIssuanceService.deleteAllBookIssuances();
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBookIssuanceById(Integer id) {
+    public ResponseEntity.BodyBuilder deleteBookIssuanceById(Integer id) {
         bookIssuanceService.deleteBookIssuanceById(id);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{bookIsbn}.i")
-    public void deleteBookIssuancesByBookIsbn(String bookIsbn) {
+    public ResponseEntity.BodyBuilder deleteBookIssuancesByBookIsbn(String bookIsbn) {
         bookIssuanceService.deleteBookIssuancesByBookIsbn(bookIsbn);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{dateIssued}.di")
-    public void deleteBookIssuancesByDateIssued(LocalDate dateIssued) {
+    public ResponseEntity.BodyBuilder deleteBookIssuancesByDateIssued(LocalDate dateIssued) {
         bookIssuanceService.deleteBookIssuancesByDateIssued(dateIssued);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{dateDue}.dd")
-    public void deleteBookIssuancesByDateDue(LocalDate dateDue) {
+    public ResponseEntity.BodyBuilder deleteBookIssuancesByDateDue(LocalDate dateDue) {
         bookIssuanceService.deleteBookIssuancesByDateDue(dateDue);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{memberId}.mi")
-    public void deleteBookIssuancesByMemberId(Integer memberId) {
+    public ResponseEntity.BodyBuilder deleteBookIssuancesByMemberId(Integer memberId) {
         bookIssuanceService.deleteBookIssuancesByMemberId(memberId);
+        return ResponseEntity.ok();
     }
 }

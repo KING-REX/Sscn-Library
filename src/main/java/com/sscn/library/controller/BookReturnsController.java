@@ -6,6 +6,8 @@ import com.sscn.library.entity.BookReturns;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.BookReturnsService;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -21,13 +23,13 @@ public class BookReturnsController {
     }
 
     @GetMapping
-    public List<BookReturns> getAllBookReturns() {
-        return bookReturnsService.getAllBookReturns();
+    public ResponseEntity<List<BookReturns>> getAllBookReturns() {
+        return ResponseEntity.ok(bookReturnsService.getAllBookReturns());
     };
 
     @GetMapping("/{id}")
-    public BookReturns getBookReturnById(@PathVariable Integer id) {
-        return bookReturnsService.getBookReturnById(id);
+    public ResponseEntity<BookReturns>  getBookReturnById(@PathVariable Integer id) {
+        return ResponseEntity.ok(bookReturnsService.getBookReturnById(id));
     }
 
 //    public List<BookReturns> getBookReturnsByBookIssued(Book bookIssued) {
@@ -35,52 +37,57 @@ public class BookReturnsController {
 //    }
 
     @GetMapping("/{bookIsbn}.i")
-    public List<BookReturns> getBookReturnsByBookIsbn(@PathVariable String bookIsbn) {
-        return bookReturnsService.getBookReturnsByBookIsbn(bookIsbn);
+    public ResponseEntity<List<BookReturns>>  getBookReturnsByBookIsbn(@PathVariable String bookIsbn) {
+        return ResponseEntity.ok(bookReturnsService.getBookReturnsByBookIsbn(bookIsbn));
     }
 
     @GetMapping("/{bookIssuanceId}.b")
-    public List<BookReturns> getBookReturnsByBookIssuanceId(@PathVariable Integer bookIssuanceId) {
-        return bookReturnsService.getBookReturnsByBookIssuanceId(bookIssuanceId);
+    public ResponseEntity<List<BookReturns>>  getBookReturnsByBookIssuanceId(@PathVariable Integer bookIssuanceId) {
+        return ResponseEntity.ok(bookReturnsService.getBookReturnsByBookIssuanceId(bookIssuanceId));
+
     }
 
     @GetMapping("/{dateReturned}.d")
-    public List<BookReturns> getBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) {
-        return bookReturnsService.getBookReturnsByDateReturned(dateReturned);
+    public ResponseEntity<List<BookReturns>>  getBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) {
+        return ResponseEntity.ok(bookReturnsService.getBookReturnsByDateReturned(dateReturned));
     }
 
     @PostMapping
-    public List<BookReturns> addBookReturns(@RequestBody List<BookReturns> bookReturns) {
-        return bookReturnsService.addBookReturns(bookReturns);
+    public ResponseEntity<List<BookReturns>>  addBookReturns(@RequestBody List<BookReturns> bookReturns) {
+        return ResponseEntity.ok(bookReturnsService.addBookReturns(bookReturns));
     }
 
     @PutMapping("/{id}")
-    public BookReturns updateBookReturns(@RequestBody BookReturns newBookReturns, @PathVariable Integer id) {
-        return bookReturnsService.updateBookReturns(newBookReturns, id);
+    public ResponseEntity<BookReturns>  updateBookReturns(@RequestBody BookReturns newBookReturns, @PathVariable Integer id) {
+        return ResponseEntity.ok(bookReturnsService.updateBookReturns(newBookReturns, id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBookReturnById(Integer id) {
+    public ResponseEntity.BodyBuilder deleteBookReturnById(Integer id) {
         bookReturnsService.deleteBookReturnById(id);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{bookIsbn}.i")
-    public void deleteBookReturnsByBookIsbn(String isbn) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIsbn(String isbn) {
         bookReturnsService.deleteBookReturnsByBookIsbn(isbn);
+        return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{bookIssuanceId}.b")
-    public void deleteBookReturnsByBookIssuanceId(Integer id) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIssuanceId(Integer id) {
         bookReturnsService.deleteBookReturnsByBookIssuanceId(id);
+        return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{dateReturned}.d")
-    public void deleteBookReturnsByDateReturned(LocalDate dateReturned) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByDateReturned(LocalDate dateReturned) {
         bookReturnsService.deleteBookReturnsByDateReturned(dateReturned);
+        return ResponseEntity.ok();
     };
 
     @DeleteMapping
-    public void deleteAllBookReturns() {
-        bookReturnsService.deleteAllBookReturns();
+    public ResponseEntity.BodyBuilder deleteAllBookReturns() {
+        bookReturnsService.deleteAllBookReturns();return ResponseEntity.ok();
     }
 }

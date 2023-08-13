@@ -4,6 +4,7 @@ package com.sscn.library.controller;
 import com.sscn.library.entity.Author;
 import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.service.AuthorService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,58 +20,62 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public Author getAuthorById(@PathVariable Integer id) {
-        return authorService.getAuthorById(id);
+    public ResponseEntity<Author> getAuthorById(@PathVariable Integer id) {
+        return ResponseEntity.ok(authorService.getAuthorById(id));
     }
 
     @GetMapping("/{lastName}.l")
-    public List<Author> getAuthorsByLastName(@PathVariable String lastName) {
-        return authorService.getAuthorsByLastName(lastName);
+    public ResponseEntity<List<Author>> getAuthorsByLastName(@PathVariable String lastName) {
+        return ResponseEntity.ok(authorService.getAuthorsByLastName(lastName));
     }
 
     @GetMapping("/{fullName}.fl")
-    public List<Author> getAuthorsByFullName(@PathVariable String fullName) {
+    public ResponseEntity<List<Author>> getAuthorsByFullName(@PathVariable String fullName) {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
-        return authorService.getAuthorsByFullName(names[0], names[1]);
+        return ResponseEntity.ok(authorService.getAuthorsByFullName(names[0], names[1]));
     }
 
     @GetMapping
-    public List<Author> getAuthors() {
-        return authorService.getAllAuthors();
+    public ResponseEntity<List<Author>> getAuthors() {
+        return ResponseEntity.ok(authorService.getAllAuthors());
     }
 
     @PostMapping
-    public List<Author> addAuthors(@RequestBody List<Author> authors) {
-        return authorService.addAuthors(authors);
+    public ResponseEntity<List<Author>> addAuthors(@RequestBody List<Author> authors) {
+        return ResponseEntity.ok(authorService.addAuthors(authors));
     }
 
     @PutMapping("/{authorId}")
-    public Author updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
-        return authorService.updateAuthor(newAuthor, authorId);
+    public ResponseEntity<Author>  updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
+        return ResponseEntity.ok(authorService.updateAuthor(newAuthor, authorId));
     }
 
     @DeleteMapping("/{id}")
-    public void removeAuthorById(@PathVariable Integer id) {
+    public ResponseEntity.BodyBuilder removeAuthorById(@PathVariable Integer id) {
         authorService.removeAuthorById(id);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public void removeAuthorsByLastName(@PathVariable String lastName) {
+    public ResponseEntity.BodyBuilder removeAuthorsByLastName(@PathVariable String lastName) {
         authorService.removeAuthorsByLastName(lastName);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public void removeAuthorsByFullName(@PathVariable String fullName) {
+    public ResponseEntity.BodyBuilder removeAuthorsByFullName(@PathVariable String fullName) {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
         authorService.removeAuthorsByFullName(names[0], names[1]);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping
-    public void removeAllAuthors() {
+    public ResponseEntity.BodyBuilder removeAllAuthors() {
         authorService.removeAllAuthors();
+        return ResponseEntity.ok();
     }
 }

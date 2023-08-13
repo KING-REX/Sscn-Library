@@ -2,7 +2,9 @@ package com.sscn.library.controller;
 
 import com.sscn.library.entity.Book;
 import com.sscn.library.service.BookService;
+import org.apache.coyote.Response;
 import org.springframework.cglib.core.Local;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,52 +21,56 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<Book>> getBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @GetMapping("/{isbn}")
-    public Book getBookByIsbn(@PathVariable String isbn) {
-        return bookService.getBookByIsbn(isbn);
+    public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(bookService.getBookByIsbn(isbn));
     }
 
     @GetMapping("/{title}.t")
-    public List<Book> getBooksByTitle(@PathVariable String title) {
-        return bookService.getBooksByTitle(title);
+    public ResponseEntity<List<Book>> getBooksByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(bookService.getBooksByTitle(title));
     }
 
     @GetMapping("/{datePurchased}.d")
-    public List<Book> getBookByDatePurchased(@PathVariable LocalDate datePurchased) {
-        return bookService.getBooksByDatePurchased(datePurchased);
+    public ResponseEntity<List<Book>>  getBookByDatePurchased(@PathVariable LocalDate datePurchased) {
+        return ResponseEntity.ok(bookService.getBooksByDatePurchased(datePurchased));
     }
 
     @PostMapping
-    public List<Book> addBooks(@RequestBody List<Book> books) {
-        return bookService.addBooks(books);
+    public ResponseEntity<List<Book>>  addBooks(@RequestBody List<Book> books) {
+        return ResponseEntity.ok(bookService.addBooks(books));
     }
 
     @PutMapping("/{bookIsbn}")
-    public Book updateBook(@RequestBody Book newBook, @PathVariable String bookIsbn) {
-        return bookService.updateBook(newBook, bookIsbn);
+    public ResponseEntity<Book>  updateBook(@RequestBody Book newBook, @PathVariable String bookIsbn) {
+        return ResponseEntity.ok(bookService.updateBook(newBook, bookIsbn));
     }
 
     @DeleteMapping
-    public void deleteAllBooks() {
+    public ResponseEntity.BodyBuilder deleteAllBooks() {
         bookService.deleteAllBooks();
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{isbn}")
-    public void deleteBookByIsbn(@PathVariable String isbn) {
+    public ResponseEntity.BodyBuilder deleteBookByIsbn(@PathVariable String isbn) {
         bookService.deleteBookByIsbn(isbn);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{title}.t")
-    public void deleteBooksByTitle(@PathVariable String title) {
+    public ResponseEntity.BodyBuilder deleteBooksByTitle(@PathVariable String title) {
         bookService.deleteBooksByTitle(title);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{datePurchased}.d")
-    public void deleteBooksByDatePurchased(@PathVariable LocalDate datePurchased) {
+    public ResponseEntity.BodyBuilder deleteBooksByDatePurchased(@PathVariable LocalDate datePurchased) {
         bookService.deleteBooksByDatePurchased(datePurchased);
+        return ResponseEntity.ok();
     }
 }

@@ -4,6 +4,8 @@ import com.sscn.library.entity.BookReturns;
 import com.sscn.library.entity.Librarian;
 import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.service.LibrarianService;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -23,71 +25,76 @@ public class LibrarianController {
 
 
     @GetMapping
-    public List<Librarian> getAllLibrarians() {
-        return librarianService.getAllLibrarians();
+    public ResponseEntity<List<Librarian>> getAllLibrarians() {
+        return ResponseEntity.ok(librarianService.getAllLibrarians());
     }
 
     @GetMapping("/{id}")
-    public Librarian getLibrarianById(@PathVariable Integer id) {
-        return librarianService.getLibrarianById(id);
+    public ResponseEntity<Librarian>  getLibrarianById(@PathVariable Integer id) {
+        return ResponseEntity.ok(librarianService.getLibrarianById(id));
     }
 
     @GetMapping("/{lastName}.l")
-    public List<Librarian> getLibrariansByLastName(@PathVariable String lastName) {
-        return librarianService.getLibrariansByLastName(lastName);
+    public ResponseEntity<List<Librarian>>  getLibrariansByLastName(@PathVariable String lastName) {
+        return ResponseEntity.ok(librarianService.getLibrariansByLastName(lastName));
     }
 
     @GetMapping("/{fullName}.fl")
-    public List<Librarian> getLibrariansByFullName(@PathVariable String fullName) {
+    public ResponseEntity<List<Librarian>>  getLibrariansByFullName(@PathVariable String fullName) {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
 
-        return librarianService.getLibrariansByFullName(names[0], names[1]);
+        return ResponseEntity.ok(librarianService.getLibrariansByFullName(names[0], names[1]));
     }
 
     @GetMapping("/{email}.e")
-    public Librarian getLibrarianByEmail(@PathVariable String email) {
-        return librarianService.getLibrarianByEmail(email);
+    public ResponseEntity<Librarian>  getLibrarianByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(librarianService.getLibrarianByEmail(email));
     }
 
     @PostMapping
-    public List<Librarian> addLibrarians(@RequestBody List<Librarian> librarians) {
-        return librarianService.addLibrarians(librarians);
+    public ResponseEntity<List<Librarian>>  addLibrarians(@RequestBody List<Librarian> librarians) {
+        return ResponseEntity.ok(librarianService.addLibrarians(librarians));
     }
 
     @PutMapping("/{librarianId}")
-    public Librarian updateLibrarian(@RequestBody Librarian newLibrarian, @PathVariable Integer librarianId) {
-        return librarianService.updateLibrarian(newLibrarian, librarianId);
+    public ResponseEntity<Librarian>  updateLibrarian(@RequestBody Librarian newLibrarian, @PathVariable Integer librarianId) {
+        return ResponseEntity.ok(librarianService.updateLibrarian(newLibrarian, librarianId));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLibrarianById(@PathVariable Integer id) {
+    public ResponseEntity.BodyBuilder deleteLibrarianById(@PathVariable Integer id) {
         librarianService.deleteLibrarianById(id);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public void deleteLibrariansByLastName(@PathVariable String lastName) {
+    public ResponseEntity.BodyBuilder deleteLibrariansByLastName(@PathVariable String lastName) {
         librarianService.deleteLibrarianByLastName(lastName);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public void deleteLibrariansByFullName(@PathVariable String fullName) {
+    public ResponseEntity.BodyBuilder deleteLibrariansByFullName(@PathVariable String fullName) {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
 
-        librarianService.deleteLibrarianByFullName(names[0], names[1]);
+         librarianService.deleteLibrarianByFullName(names[0], names[1]);
+         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{email}.e")
-    public void deleteLibrarianByEmail(@PathVariable String email) {
+    public ResponseEntity.BodyBuilder deleteLibrarianByEmail(@PathVariable String email) {
         librarianService.deleteLibrarianByEmail(email);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping
-    public void deleteAllLibrarians() {
+    public ResponseEntity.BodyBuilder deleteAllLibrarians() {
         librarianService.deleteAllLibrarians();
+        return ResponseEntity.ok();
     }
 
 }
