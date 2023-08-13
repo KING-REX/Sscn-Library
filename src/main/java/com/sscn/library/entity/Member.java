@@ -1,6 +1,7 @@
 package com.sscn.library.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Entity
-public class Member implements Serializable {
+public class  Member implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,8 +27,11 @@ public class Member implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @NotNull(message = "Email is mandatory")
+    @Valid
+    @NotNull(message = "email is mandatory")
     @Email
     @Column(nullable = false, unique = true)
     private String email;
+
+
 }

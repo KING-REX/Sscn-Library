@@ -6,7 +6,6 @@ import com.sscn.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -24,11 +23,16 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public List<Member> addMembers(List<Member> members){
+        members.forEach(member -> this.addNewMember(member));
+        return members;
+    }
+
     public void deleteMemberById(Integer id){
         memberRepository.deleteById(id);
     }
 
     public Member getMemberById(Integer id){
-        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member %s not found".formatted(id)));
+        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member is not found".formatted(id)));
     }
 }
