@@ -88,4 +88,28 @@ public class LibrarianService {
 
         return librarianRepository.save(oldLibrarian);
     }
+
+    public void deleteLibrarian(Librarian librarian) {
+        librarianRepository.delete(librarian);
+    }
+
+    public void deleteLibrarianById(Integer id) {
+        deleteLibrarian(getLibrarianById(id));
+    }
+
+    public void deleteLibrarianByEmail(String email) {
+        deleteLibrarian(getLibrarianByEmail(email));
+    }
+
+    public void deleteLibrarianByLastName(String lastName) {
+        getLibrariansByLastName(lastName).forEach(this::deleteLibrarian);
+    }
+
+    public void deleteLibrarianByFullName(String firstName, String lastName) {
+        getLibrariansByFullName(firstName, lastName).forEach(this::deleteLibrarian);
+    }
+
+    public void deleteAllLibrarians() {
+        librarianRepository.deleteAll();
+    }
 }

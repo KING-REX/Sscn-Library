@@ -18,9 +18,11 @@ public class LibrarianController {
         this.librarianService = librarianService;
     }
 
-    @PostMapping("/login")
-    public Optional<Librarian> librarianLogin(Librarian librarian){
-        return librarianService.getLibrarianByEmail();
-    }
+//    @PostMapping("/login")
+//    public Optional<Librarian> librarianLogin(Librarian librarian){
+//        return librarianService.getLibrarianByEmail();
+//    }
+
+
 
 }
