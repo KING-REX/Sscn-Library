@@ -1,0 +1,97 @@
+ENTITY:
+1. Author
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	GET				/api/v1/authors							For retrieving all the authors
+	2.	GET				/api/v1/authors/{id}					For retrieving author by Id
+	3.	GET				/api/v1/authors/{lastName}.l			For retrieving authors based on lastName
+	4.	GET				/api/v1/authors/{fullName}.fl			For retrieving authors based on fullName
+	5.	POST			/api/v1/authors							For adding authors
+	6.	PUT				/api/v1/authors/{authorId}				For updating the author that has specified id
+	7.	DELETE			/api/v1/authors							For deleting all the authors
+	8.	DELETE			/api/v1/authors/{id}					For deleting author by Id
+	9.	DELETE			/api/v1/authors/{lastName}.l			For deleting authors based on lastName
+	10.	DELETE			/api/v1/authors/{fullName}.fl			For deleting authors based on fullName
+	
+
+2. Book
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	GET				/api/v1/books							For retrieving all the books
+	2.	GET				/api/v1/books/{isbn}					For retrieving book by Isbn
+	3.	GET				/api/v1/books/{title}.t					For retrieving books by title
+	4.	GET				/api/v1/books/{datePurchased}.d			For retrieving books based on datePurchased
+	5. 	POST			/api/v1/books							For adding books
+	6.	PUT				/api/v1/books/{bookIsbn}				For updating the book with specified isbn
+	7.	DELETE			/api/v1/books							For deleting all books
+	8.	DELETE			/api/v1/books/{isbn}					For deleting book by Isbn
+	9.	DELETE			/api/v1/books/{title}.t					For deleting books by title
+	10.	DELETE			/api/v1/books/{datePurchased}.d			For deleting books by datePurchased
+	
+3. BookIssuance
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	GET				/api/v1/bookIssuance					For retrieving all the bookIssuances
+	2.	GET				/api/v1/bookIssuance/{id}				For retrieving bookIssuance by Id
+	3.	GET				/api/v1/bookIssuance/{bookIsbn}.i		For retrieving bookIssuances by bookIsbn
+	4.	GET				/api/v1/bookIssuance/{dateIssued}.di	For retrieving bookIssuances by dateIssued
+	5.	GET				/api/v1/bookIssuance/{dateDue}.dd		For retrieving bookIssuances by dateDue
+	6.	GET				/api/v1/bookIssuance/{memberId}.mi		For retrieving bookIssuances by memberId
+	7.	POST			/api/v1/bookIssuance					For adding bookIssuances
+	8.	PUT				/api/v1/bookIssuance/{id}				For updating the bookIssuance with specified id
+	9.	DELETE			/api/v1/bookIssuance					For deleting all the bookIssuances
+	10.	DELETE			/api/v1/bookIssuance/{id}				For deleting bookIssuance by Id
+	11.	DELETE			/api/v1/bookIssuance/{bookIsbn}.i		For deleting bookIssuances by bookIsbn
+	12.	DELETE			/api/v1/bookIssuance/{dateIssued}.di	For deleting bookIssuances by dateIssued
+	13.	DELETE			/api/v1/bookIssuance/{dateDue}.dd		For deleting bookIssuances by dateDue
+	14.	DELETE			/api/v1/bookIssuance/{memberId}.mi		For deleting bookIssuances by memberId
+	 
+4. BookReturns
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	GET				/api/v1/bookReturns						For retrieving all the bookReturns
+	2.	GET				/api/v1/bookReturns/{id}				For retrieving bookReturns by Id
+	3.	GET				/api/v1/bookReturns/{bookIsbn}.i		For retrieving bookReturns by bookIsbn
+	4.	GET				/api/v1/bookReturns/{bookIssuanceId}.b	For retrieving bookReturns by bookIssuance id
+	5.	GET				/api/v1/bookReturns/{dateReturned}.d	For retrieving bookReturns by dateReturned
+	6.	POST			/api/v1/bookReturns						For adding bookReturns
+	7.	PUT				/api/v1/bookReturns/{id}				For updating the bookReturns with specified id
+	8.	DELETE			/api/v1/bookReturns						For deleting all the bookReturns
+	9.	DELETE			/api/v1/bookReturns/{id}				For deleting bookReturns by Id
+	10.	DELETE			/api/v1/bookReturns/{bookIsbn}.i		For deleting bookReturns by bookIsbn
+	11.	DELETE			/api/v1/bookReturns/{bookIssuanceId}.b	For deleting bookReturns by bookIssuance id
+	12.	DELETE			/api/v1/bookReturns/{dateReturned}.d	For deleting bookReturns by dateReturned
+	
+5. Member
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	GET				/api/v1/member							For retrieving all the members
+	2.	GET				/api/v1/member/{id}						For retrieving member by Id
+	3.	GET				/api/v1/member/{email}.e				For retrieving member by email
+	4.	GET				/api/v1/member/{lastName}.l				For retrieving members by lastName
+	5.	GET				/api/v1/member/{fullName}.fl			For retrieving members by fullName
+	6.	POST			/api/v1/member							For adding members
+	7.	PUT				/api/v1/member/{id}						For updating the member with specified id
+	8.	DELETE			/api/v1/member							For deleting all the members
+	9.	DELETE			/api/v1/member/{id}						For deleting member by Id
+	10.	DELETE			/api/v1/member/{email}.e				For deleting member by email
+	11.	DELETE			/api/v1/member/{lastName}.l				For deleting members by lastName
+	12.	DELETE			/api/v1/member/{fullName}.fl			For deleting members by fullName
+	
+6. Everything concerning admin
+	RESOURCES:
+		METHOD TYPE		LOCATION								DESCRIPTION
+	1.	POST			/login									For logging in to the app as an admin
+	2.	POST			/logout									For logging out of the app as an admin
+	
+The "Everything concerning admin" is not an entity.. it's just a combination of a few entities like 
+	User(all types of users), Authority(that maps users to their UserRoles) and 
+	UserRole (the roles of all the types of users)
+But I didnt add them here because, there's only one type of User, the admin (also the only User), 
+	one type of UserRole, ADMIN, because only the admins will be accessing the app, and only one record for
+	Authority, which maps this one admin to the ADMIN role. No one will be accessing this information (at least
+	for now) so it won't be displayed anywhere.
+	
+
+N/B: Curly braces in the location denote parameters to be appended to the url. So,
+		/{firstName}.f denotes a parameter firstName appended to the url, followed by a ".f"
