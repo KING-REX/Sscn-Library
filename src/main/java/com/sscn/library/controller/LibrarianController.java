@@ -48,17 +48,17 @@ public class LibrarianController {
 
     @GetMapping("/{email}.e")
     public Librarian getLibrarianByEmail(@PathVariable String email) {
-        return getLibrarianByEmail(email);
+        return librarianService.getLibrarianByEmail(email);
     }
 
     @PostMapping
     public List<Librarian> addLibrarians(@RequestBody List<Librarian> librarians) {
-        return addLibrarians(librarians);
+        return librarianService.addLibrarians(librarians);
     }
 
     @PutMapping("/{librarianId}")
     public Librarian updateLibrarian(@RequestBody Librarian newLibrarian, @PathVariable Integer librarianId) {
-        return updateLibrarian(newLibrarian, librarianId);
+        return librarianService.updateLibrarian(newLibrarian, librarianId);
     }
 
     @DeleteMapping("/{id}")
