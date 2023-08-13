@@ -6,7 +6,6 @@ import com.sscn.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -20,11 +19,11 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member addMember(Member member)  {
+    public void addMember(Member member)  {
 //        Member savedMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(()-> new RuntimeException("\"Member with email \" + savedMember.getEmail() + \"already exists\""));
         Member savedMember = memberRepository.findByEmail(member.getEmail());
         if(memberRepository.existsByEmail(member.getEmail())){
-            return memberRepository.save(member);
+            memberRepository.save(member);
         }
         else{
             throw new RuntimeException("Member already exists");
