@@ -33,7 +33,6 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public Map<String, String> handleNotFoundExceptions(NotFoundException exception){
         Map<String, String> errors = new HashMap<>();
-
         errors.put("errorMessage", exception.getMessage());
         return errors;
     }
@@ -48,15 +47,7 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(RuntimeException.class)
-    public Map<String, String> handleRuntimeExceptions(RuntimeException exception){
-        Map<String, String> errors = new HashMap<>();
-        errors.put("errorMessage", exception.getMessage());
-        return errors;
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(RuntimeException.class)
-    public Map<String, String> handleSQLRuntimeExceptions(RuntimeException exception){
+    public Map<String, String> handleRuntimeExceptions(SQLIntegrityConstraintViolationException exception){
         Map<String, String> errors = new HashMap<>();
         errors.put("errorMessage", exception.getMessage());
         return errors;

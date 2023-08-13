@@ -4,7 +4,6 @@ import com.sscn.library.entity.Member;
 import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.MemberService;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -59,39 +59,43 @@ public class MemberController {
         return new ResponseEntity<>(membersToAdd, HttpStatus.CREATED);
     }
 
-//    @PutMapping("/{memberId}")
-//    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member newMember, @PathVariable Integer memberId) {
-//        Member member =  memberService.updateMember(newMember, memberId);
-//        return ResponseEntity.ok(member);
-//    }
+    @PutMapping("/{memberId}")
+    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member newMember, @PathVariable Integer memberId) {
+        Member member =  memberService.updateMember(newMember, memberId);
+        return ResponseEntity.ok(member);
+    }
 
-//    @DeleteMapping
-//    public ResponseEntity<Nullable> deleteAllMembers() {
-//        memberService.deleteAllMembers();
-//        return ResponseEntity.ok(null);
-//    }
+    @DeleteMapping
+    public ResponseEntity<Nullable> deleteAllMembers() {
+        memberService.deleteAllMembers();
+        return ResponseEntity.ok(null);
+    }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity.BodyBuilder deleteMemberById(Integer id) throws IllegalArgumentException {
-//        memberService.deleteMemberById(id);
-//        return ResponseEntity.ok();
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity.BodyBuilder deleteMemberById(Integer id) throws IllegalArgumentException {
+        memberService.deleteMemberById(id);
+        return ResponseEntity.ok();
+    }
 
-//    @DeleteMapping("/{email}.e")
-//    public ResponseEntity.BodyBuilder deleteMemberByEmail(String email) throws NotFoundException {
-//        memberService.deleteMemberByEmail(email);
-//        return ResponseEntity.ok();
-//    }
+    @DeleteMapping("/{email}.e")
+    public ResponseEntity.BodyBuilder deleteMemberByEmail(String email) throws NotFoundException {
+        memberService.deleteMemberByEmail(email);
+        return ResponseEntity.ok();
+    }
 
-//    @DeleteMapping("/{lastName}.l")
-//    public ResponseEntity.BodyBuilder deleteMembersByLastName(String lastName) throws NotFoundException {
-//        memberService.deleteMembersByLastName(lastName);
-//        return ResponseEntity.ok();
-//    }
+    @DeleteMapping("/{lastName}.l")
+    public ResponseEntity.BodyBuilder deleteMembersByLastName(String lastName) throws NotFoundException {
+        memberService.deleteMembersByLastName(lastName);
+        return ResponseEntity.ok();
+    }
 
-//    @DeleteMapping("/{fullName}.fl")
-//    public ResponseEntity.BodyBuilder deleteMembersByFullName(String fullName) throws NotFoundException {
-//        memberService.deleteMembersByFullName(fullName);
-//        return ResponseEntity.ok();
-//    }
+    @DeleteMapping("/{fullName}.fl")
+    public ResponseEntity.BodyBuilder deleteMembersByFullName(String fullName) throws NotFoundException {
+        String[] names = fullName.split("-");
+        if(names.length > 2){
+            throw new InvalidArgumentException("Full Name is Wrong");
+        }
+        memberService.deleteMembersByFullName(names[0], names[1]);
+        return ResponseEntity.ok();
+    }
 }
