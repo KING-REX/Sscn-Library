@@ -20,10 +20,7 @@ public class LibrarianController {
         this.librarianService = librarianService;
     }
 
-//    @PostMapping("/login")
-//    public Optional<Librarian> librarianLogin(Librarian librarian){
-//        return librarianService.getLibrarianByEmail();
-//    }
+
 
     @GetMapping
     public List<Librarian> getAllLibrarians() {

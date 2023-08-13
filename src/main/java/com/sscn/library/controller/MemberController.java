@@ -1,8 +1,12 @@
 package com.sscn.library.controller;
 
 import com.sscn.library.entity.Member;
+import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.MemberService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,15 +15,17 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1")
 public class MemberController {
 
 
+    @Autowired
     private final MemberService memberService;
 
     public MemberController(MemberService memberService){
@@ -27,34 +33,18 @@ public class MemberController {
     }
 
 
-//    @PostMapping("members")
-//    public ResponseEntity<Member> createMember(@Valid @RequestBody Member member){
-//        Member memberToAdd = memberService.addNewMember(member);
-//        return new ResponseEntity<Member>(memberToAdd, HttpStatus.CREATED);
-//    }
-
-    @PostMapping("create-member")
-    public ResponseEntity<?> createMember(@RequestHeader(value = "apikey", required = false) String apiKey, @Valid @RequestBody Member member){
+    @PostMapping("/member")
+    public ResponseEntity<Member> createMember(@Valid @RequestBody Member member) throws RuntimeException {
         Member memberToAdd = memberService.addNewMember(member);
-        return new ResponseEntity<Member>(memberToAdd, HttpStatus.CREATED);
-    }
-//
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationErrors(MethodArgumentNotValidException exception){
-        Map<String, String> errors = new HashMap<>();
-
-        exception.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-
-        return errors;
+        return new ResponseEntity<>(memberToAdd, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/members")
-//    public List<Member> addMembers(@RequestBody List<Member> members){
-//        return memberService.addMembers(members);
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Member> getMemberById(@PathVariable int id) throws NotFoundException{
+        return ResponseEntity.ok(memberService.getMemberById(id));
+    }
+    @GetMapping("/{email}")
+    public ResponseEntity<Member> getMemberByEmail(@PathVariable String email) throws NotFoundException{
+        return ResponseEntity.ok(memberService.getMemberByEmail(email));
+    }
 }
