@@ -66,9 +66,9 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Nullable> deleteAllMembers() {
+    public ResponseEntity.BodyBuilder deleteAllMembers() {
         memberService.deleteAllMembers();
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{id}")
