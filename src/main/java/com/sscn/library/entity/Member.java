@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,17 +20,15 @@ public class  Member implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotEmpty
     @Column(nullable = false)
     private String firstName;
 
-    @NotEmpty
     @Column(nullable = false)
     private String lastName;
 
     @Valid
-    @NotNull(message = "email is mandatory")
-    @Email
+    @NotNull(message = "Email is mandatory!")
+    @Email(message = "Email is invalid!", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
     @Column(nullable = false, unique = true)
     private String email;
 

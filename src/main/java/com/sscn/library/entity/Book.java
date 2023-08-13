@@ -1,6 +1,7 @@
 package com.sscn.library.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 public class Book implements Serializable {
     @Id
+    @NotNull(message = "ISBN is mandatory!")
     private String isbn;
 
     @Column(nullable = false)

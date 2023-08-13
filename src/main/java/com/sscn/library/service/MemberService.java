@@ -20,11 +20,9 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public void addMember(Member member)  {
-//        Member savedMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(()-> new DuplicateValue("\"Member with email \" + savedMember.getEmail() + \"already exists\""));
-        Member savedMember = memberRepository.findByEmail(member.getEmail());
-        if(memberRepository.existsByEmail(member.getEmail())){
-            memberRepository.save(member);
+    public Member addMember(Member member)  {
+        if(!memberRepository.existsByEmail(member.getEmail())){
+            return memberRepository.save(member);
         }
         else{
             throw new DuplicateValueException("Member already exists");
