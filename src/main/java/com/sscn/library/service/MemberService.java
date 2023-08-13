@@ -30,9 +30,7 @@ public class MemberService {
     }
 
     public List<Member> addMembers(List<Member> members){
-        members.forEach(member -> {
-            this.addNewMember(member);
-        });
+        members.forEach(this::addNewMember);
         return members;
     }
 
