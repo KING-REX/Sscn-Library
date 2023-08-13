@@ -1,13 +1,12 @@
 package com.sscn.library.service;
 
 import com.sscn.library.entity.Member;
-import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
@@ -21,16 +20,13 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member addNewMember(Member member)  {
-        Member savedMember = memberRepository.findByMail(member.getEmail());
-        if(savedMember != null){
-            throw new RuntimeException("Member with email " + savedMember.getEmail() + "already exists");
-        }
+    public Member addMember(Member member)  {
+        Member savedMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(()-> new RuntimeException("\"Member with email \" + savedMember.getEmail() + \"already exists\""));
         return memberRepository.save(member);
     }
 
     public List<Member> addMembers(List<Member> members){
-        members.forEach(this::addNewMember);
+        members.forEach(this::addMember);
         return members;
     }
 
@@ -42,9 +38,9 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member is not found".formatted(id)));
     }
 
-    public Member getMemberByEmail(String email){
-        Member member = memberRepository.findByMail(email);
-        if(member != null){
+    public Optional<Member> getMemberByEmail(String email){
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if(member.isPresent()){
             return member;
         }
         else{
