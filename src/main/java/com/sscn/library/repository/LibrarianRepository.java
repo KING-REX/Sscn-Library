@@ -15,4 +15,8 @@ public interface LibrarianRepository extends JpaRepository<Librarian, Integer> {
     Optional<Librarian> findByEmail(String email);
 
     Optional<List<Librarian>> findAllByLastName(String lastName);
+
+    Optional<List<Librarian>> findAllByFirstNameAndLastName(String firstName, String lastName);
+
+    Optional<List<Librarian>> findAllByLastNameAndFirstName(String lastName, String firstName);
 }

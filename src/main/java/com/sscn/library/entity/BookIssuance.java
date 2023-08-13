@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class BookIssuance implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @JoinColumn(name = "BookId", nullable = false)
     private Book book;

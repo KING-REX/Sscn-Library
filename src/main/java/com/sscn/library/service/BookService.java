@@ -37,7 +37,7 @@ public class BookService {
     }
 
     public Book addBook(Book book){
-        if(bookRepository.existsByIsbn(book.getIsbn()))
+        if(book.getIsbn() != null && bookRepository.existsByIsbn(book.getIsbn()))
             throw new DuplicateValueException("Book %s already exists.".formatted(book.getIsbn()));
 
         return bookRepository.save(book);

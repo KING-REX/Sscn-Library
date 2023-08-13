@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class BookReturns {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @JoinColumn(referencedColumnName = "id", nullable = false)
     private Book bookIssued;

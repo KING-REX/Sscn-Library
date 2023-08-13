@@ -34,18 +34,34 @@ public class AuthorService {
 
     public List<Author> getAuthorsByFullName(String firstName, String lastName) {
 
-        return authorRepository
-                .findAllByFirstNameAndLastName(firstName, lastName)
-                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+//        return authorRepository
+//                .findAllByFirstNameAndLastName(firstName, lastName)
+//                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
 
+//        List<Author> fullAuthorList = authorRepository
+//                .findAllByFirstNameAndLastName(firstName, lastName)
+//                .or(() -> authorRepository.findAllByLastNameAndFirstName(firstName, lastName))
+//                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+////                .orElseGet(() -> revAuthorList);
+//////                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
 
 
         //TODO: Make this method also search in reverse (i.e. ("John", "Doe") should return the same results as ("Doe", "John").
-//        return authorRepository
-//                .findAllByFirstNameAndLastName(firstName, lastName)
-//                .orElse(authorRepository
-//                        .findAllByLastNameAndFirstName(firstName, lastName)
-//                        .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName))));
+        // Update: This method now works. The only problem is that the "or"/"orElse" part of the function is meant to be handled by the Optional like
+        // the above commented fullAuthorList(although it's not working), not manually
+        List<Author> revAuthorList = authorRepository
+                .findAllByLastNameAndFirstName(firstName, lastName)
+                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+        List<Author> authorList = authorRepository
+                .findAllByFirstNameAndLastName(firstName, lastName)
+                .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
+
+        if(!authorList.isEmpty())
+            return authorList;
+        if(!revAuthorList.isEmpty())
+            return revAuthorList;
+
+        return authorList;
     }
 
     public Author addAuthor(Author author) {

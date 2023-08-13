@@ -26,7 +26,7 @@ public class Member implements Serializable {
     @Column(nullable = false)
     private String lastName;
 
-    @NotNull(message = "email is mandatory")
+    @NotNull(message = "Email is mandatory")
     @Email
     @Column(nullable = false, unique = true)
     private String email;

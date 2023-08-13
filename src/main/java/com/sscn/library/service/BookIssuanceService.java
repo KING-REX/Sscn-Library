@@ -64,7 +64,7 @@ public class BookIssuanceService {
 
 
     public BookIssuance addBookIssuance(BookIssuance bookIssuance) {
-        if(bookIssuanceRepository.existsById(bookIssuance.getId()))
+        if(bookIssuance.getId() != null && bookIssuanceRepository.existsById(bookIssuance.getId()))
             throw new DuplicateValueException("Book Issuance %s already exists.".formatted(bookIssuance.getId()));
 
         return bookIssuanceRepository.save(bookIssuance);
