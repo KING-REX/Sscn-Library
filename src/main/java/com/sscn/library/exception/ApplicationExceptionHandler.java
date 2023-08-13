@@ -29,7 +29,7 @@ public class ApplicationExceptionHandler {
         return errors;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NotFoundException.class)
     public Map<String, String> handleNotFoundExceptions(NotFoundException exception){
         Map<String, String> errors = new HashMap<>();
@@ -37,9 +37,41 @@ public class ApplicationExceptionHandler {
         return errors;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateValueException.class)
+    public Map<String, String> handleDuplicateValueExceptions(NotFoundException exception){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", exception.getMessage());
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalStateException.class)
+    public Map<String, String> handleIllegalStateExceptions(NotFoundException exception){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", exception.getMessage());
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidArgumentException.class)
+    public Map<String, String> handleInvalidArgumentExceptions(NotFoundException exception){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", exception.getMessage());
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Map<String, String> handleIllegalArgumentExceptions(NotFoundException exception){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", exception.getMessage());
+        return errors;
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public Map<String, String> handleDuplicateValueExceptions(SQLIntegrityConstraintViolationException exception){
+    public Map<String, String> handleSQLIntegrityConstraintViolationExceptions(SQLIntegrityConstraintViolationException exception){
         Map<String, String> errors = new HashMap<>();
         errors.put("errorMessage", exception.getMessage());
         return errors;

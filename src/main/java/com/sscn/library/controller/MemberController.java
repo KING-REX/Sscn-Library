@@ -1,6 +1,7 @@
 package com.sscn.library.controller;
 
 import com.sscn.library.entity.Member;
+import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.MemberService;
@@ -54,7 +55,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Member>> addMembers(@Valid @RequestBody List<Member> members) throws RuntimeException {
+    public ResponseEntity<List<Member>> addMembers(@Valid @RequestBody List<Member> members) throws DuplicateValueException, IllegalStateException {
         List<Member> membersToAdd = memberService.addMembers(members);
         return new ResponseEntity<>(membersToAdd, HttpStatus.CREATED);
     }
