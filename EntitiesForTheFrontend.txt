@@ -1,0 +1,72 @@
+ENTITIES
+
+1. Author (Ik you guys didn't want to see this but, well...)
+	Attributes:
+		a. int id (primary key)
+		b. String firstName
+		c. String lastName
+		d. List<Book> books (all the books written by the author is stored here)
+		
+		So this particular attribute, books, is mapped to the "authors" in the Book table, meaning there's
+		a join table that shows just books and the authors that wrote them. If used in reverse, it could also 
+		be used to show authors and the books they wrote.
+
+2. Book
+	Attribues:
+		a. String isbn (primary key)
+		b. String title
+		c. Date datePurchased (just use the format yyyy-mm-dd, to avoid wahala. That's the format the json will use)
+		d. int availableCopies
+		e. int totalCopies
+		f. List<Author> authors (all the authors that wrote the book will be stored here)
+		
+3. Book Issuance (Records for book issues/borrows)
+	Attribues:
+		a. int id (primary key)
+		b. Book book (the book that was issued) (foreign key)
+		c. Date dateIssued
+		d. Date dateDue (when the book should be returned)
+		e. Member issuedTo (the borrower basically) (foreign key)
+		f. ReturnStatus returnStatus (BORROWED, RETURNED or OVERDUE. This one is updated when the book is returned)
+		
+4. Book Returns (Records for book returns)
+	Attributes:
+		a. int id (primary key)
+		b. Book bookIssued (foreign key)
+		c. BookIssuance bookIssuance (foreign key)
+		d. Date dateReturned
+		
+5. Librarian (for the admins themselves... I doubt they should be able to see this information tho)
+	Attributes:
+		a. int id (primary key)
+		b. String firstName
+		c. String lastName
+		d. String email
+		e. String password
+
+6. Member (for the students, teachers, principals, hods, staff and every person that uses the school library)
+	Attributes:
+		a. int id (primary key)
+		b. String firstName
+		c. String lastName
+		d. String email
+		
+
+NOTES THAT MAY BE USEFUL:
+
+1. Anywhere you see (foreign key), there's probably a reference type there, not a primitive type that can be 
+	easily displayed. So in places like that, you'll be displaying the primary keys of their respective tables.
+	It'll be a plus if clicking on this primary key takes the user to the table of the foreign key and shows them 
+	the information at once, instead of them having to manually change tables and look up the id, just to get that
+	same information.
+	
+2. For attributes that are more than one, you don't need to display them directly. There's likely another table
+	for that. Or if you want, you could loop through that table, get the attributes in a list, and then display
+	them in a separated-commas format.
+	
+3. I think it'd be better to display easily remembered attributes (like name, title, etc) instead of using id and
+	primary keys every time, this is mostly for foreign keys and the likes...
+	
+	
+		SO WITH ALL SAID AND DONE, HAVE FUN CODING!
+							CHEERS 🥂
