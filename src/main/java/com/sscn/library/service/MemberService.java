@@ -1,6 +1,7 @@
 package com.sscn.library.service;
 
 import com.sscn.library.entity.Member;
+import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class MemberService {
             memberRepository.save(member);
         }
         else{
-            throw new RuntimeException("Member already exists");
+            throw new DuplicateValueException("Member already exists");
         }
     }
 

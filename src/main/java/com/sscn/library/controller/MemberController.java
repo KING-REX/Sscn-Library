@@ -39,19 +39,19 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberByEmail(email));
     }
 
-//    @GetMapping("/{lastName}.l")
-//    public ResponseEntity<List<Member>> getMembersByLastName(@PathVariable String lastName) {
-//        return ResponseEntity.ok(memberService.getMembersByLastName(lastName));
-//    }
+    @GetMapping("/{lastName}.l")
+    public ResponseEntity<List<Member>> getMembersByLastName(@PathVariable String lastName) {
+        return ResponseEntity.ok(memberService.getMembersByLastName(lastName));
+    }
 
-//    @GetMapping("/{fullName}.fl")
-//    public ResponseEntity<List<Member>> getMembersByFullName(@PathVariable String fullName) {
-//        String[] names = fullName.split("-");
-//        if(names.length > 2)
-//            throw new InvalidArgumentException("Syntax for full name is wrong!");
-//
-//        return ResponseEntity.ok(memberService.getMembersByFullName(names[0], names[1]));
-//    }
+    @GetMapping("/{fullName}.fl")
+    public ResponseEntity<List<Member>> getMembersByFullName(@PathVariable String fullName) {
+        String[] names = fullName.split("-");
+        if(names.length > 2)
+            throw new InvalidArgumentException("Syntax for full name is wrong!");
+
+        return ResponseEntity.ok(memberService.getMembersByFullName(names[0], names[1]));
+    }
 
     @PostMapping
     public ResponseEntity<List<Member>> addMembers(@Valid @RequestBody List<Member> members) throws RuntimeException {
