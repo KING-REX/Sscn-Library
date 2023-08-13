@@ -44,7 +44,7 @@ public class BookReturnsController {
         return bookReturnsService.getBookReturnsByBookIssuanceId(bookIssuanceId);
     }
 
-    @GetMapping("/{dateReturned}")
+    @GetMapping("/{dateReturned}.d")
     public List<BookReturns> getBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) {
         return bookReturnsService.getBookReturnsByDateReturned(dateReturned);
     }
@@ -74,7 +74,7 @@ public class BookReturnsController {
         bookReturnsService.deleteBookReturnsByBookIssuanceId(id);
     };
 
-    @DeleteMapping("/{dateReturned}")
+    @DeleteMapping("/{dateReturned}.d")
     public void deleteBookReturnsByDateReturned(LocalDate dateReturned) {
         bookReturnsService.deleteBookReturnsByDateReturned(dateReturned);
     };

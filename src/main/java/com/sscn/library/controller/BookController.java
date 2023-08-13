@@ -2,6 +2,7 @@ package com.sscn.library.controller;
 
 import com.sscn.library.entity.Book;
 import com.sscn.library.service.BookService;
+import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -32,6 +33,11 @@ public class BookController {
         return bookService.getBooksByTitle(title);
     }
 
+    @GetMapping("/{datePurchased}.d")
+    public List<Book> getBookByDatePurchased(@PathVariable LocalDate datePurchased) {
+        return bookService.getBooksByDatePurchased(datePurchased);
+    }
+
     @PostMapping
     public List<Book> addBooks(@RequestBody List<Book> books) {
         return bookService.addBooks(books);
@@ -57,7 +63,7 @@ public class BookController {
         bookService.deleteBooksByTitle(title);
     }
 
-    @DeleteMapping("/{date-purchased}.d")
+    @DeleteMapping("/{datePurchased}.d")
     public void deleteBooksByDatePurchased(@PathVariable LocalDate datePurchased) {
         bookService.deleteBooksByDatePurchased(datePurchased);
     }

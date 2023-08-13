@@ -29,7 +29,7 @@ public class BookIssuanceController {
         return bookIssuanceService.getBookIssuanceById(id);
     }
 
-    @GetMapping("/{bookIsbn}")
+    @GetMapping("/{bookIsbn}.i")
     public List<BookIssuance> getBookIssuancesByBook(Book book) {
         return bookIssuanceService.getBookIssuancesByBook(book);
     }
@@ -44,16 +44,16 @@ public class BookIssuanceController {
         return bookIssuanceService.getBookIssuancesByDateDue(dateDue);
     }
 
-    @GetMapping("/{id}.mi")
-    public List<BookIssuance> getBookIssuancesByMemberId(Integer id) {
-        return bookIssuanceService.getBookIssuancesByMemberId(id);
+    @GetMapping("/{memberId}.mi")
+    public List<BookIssuance> getBookIssuancesByMemberId(Integer memberId) {
+        return bookIssuanceService.getBookIssuancesByMemberId(memberId);
     }
 
 
-    @PostMapping("/member")
-    public List<BookIssuance> getBookIssuancesByMember(@RequestBody Member issuedTo) {
-        return bookIssuanceService.getBookIssuancesByMemberIssuedTo(issuedTo);
-    }
+//    @PostMapping("/member")
+//    public List<BookIssuance> getBookIssuancesByMember(@RequestBody Member issuedTo) {
+//        return bookIssuanceService.getBookIssuancesByMemberIssuedTo(issuedTo);
+//    }
 
     @PostMapping
     public List<BookIssuance> addBookIssuances(List<BookIssuance> bookIssuances) {
@@ -75,7 +75,7 @@ public class BookIssuanceController {
         bookIssuanceService.deleteBookIssuanceById(id);
     }
 
-    @DeleteMapping("/{bookIsbn}")
+    @DeleteMapping("/{bookIsbn}.i")
     public void deleteBookIssuancesByBookIsbn(String bookIsbn) {
         bookIssuanceService.deleteBookIssuancesByBookIsbn(bookIsbn);
     }
@@ -90,8 +90,8 @@ public class BookIssuanceController {
         bookIssuanceService.deleteBookIssuancesByDateDue(dateDue);
     }
 
-    @DeleteMapping("/{id}.mi")
-    public void deleteBookIssuancesByMemberId(Integer id) {
-        bookIssuanceService.deleteBookIssuancesByMemberId(id);
+    @DeleteMapping("/{memberId}.mi")
+    public void deleteBookIssuancesByMemberId(Integer memberId) {
+        bookIssuanceService.deleteBookIssuancesByMemberId(memberId);
     }
 }

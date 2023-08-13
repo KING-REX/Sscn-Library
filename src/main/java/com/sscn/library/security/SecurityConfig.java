@@ -35,21 +35,21 @@ public class SecurityConfig
 //                    auth.requestMatchers("/api/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
-                .formLogin(form -> {
-                    form.loginPage("/login").permitAll();
-                    form.defaultSuccessUrl("/", true); //Frontend url replaces the defaultSuccessUrl "/"
-                    form.passwordParameter("password");
-                    form.usernameParameter("username");
-                })
-                .logout(logout -> {
-                    logout
-                            .logoutUrl("/logout")
-                            .clearAuthentication(true)
-                            .invalidateHttpSession(true)
-                            .deleteCookies("JSESSIONID", "remember-me")
-                            .logoutSuccessUrl("/login");
-                });
-//                .httpBasic(httpBasic -> {});
+//                .formLogin(form -> {
+//                    form.loginPage("/login").permitAll();
+//                    form.defaultSuccessUrl("/", true); //Frontend url replaces the defaultSuccessUrl "/"
+//                    form.passwordParameter("password");
+//                    form.usernameParameter("username");
+//                })
+//                .logout(logout -> {
+//                    logout
+//                            .logoutUrl("/logout")
+//                            .clearAuthentication(true)
+//                            .invalidateHttpSession(true)
+//                            .deleteCookies("JSESSIONID", "remember-me")
+//                            .logoutSuccessUrl("/login");
+//                });
+                .httpBasic(httpBasic -> {});
 
         return http.build();
     }
