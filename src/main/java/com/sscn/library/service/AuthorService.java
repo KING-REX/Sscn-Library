@@ -1,6 +1,7 @@
 package com.sscn.library.service;
 
 import com.sscn.library.entity.Author;
+import com.sscn.library.entity.Book;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.AuthorRepository;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final BookService bookService;
 
 //    @Autowired
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, BookService bookService) {
         this.authorRepository = authorRepository;
+        this.bookService = bookService;
     }
 
     public List<Author> getAllAuthors() {
@@ -56,8 +59,9 @@ public class AuthorService {
                 .findAllByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(() -> new NotFoundException("No author with the name %s %s exists.".formatted(firstName, lastName)));
 
-        if(!authorList.isEmpty())
+        if(!authorList.isEmpty()) {
             return authorList;
+        }
         if(!revAuthorList.isEmpty())
             return revAuthorList;
 
@@ -90,6 +94,14 @@ public class AuthorService {
 
         if(newAuthor.getBooks() != null && !newAuthor.getBooks().isEmpty())
             oldAuthor.setBooks(newAuthor.getBooks());
+        else if(newAuthor.getBookIsbns() != null && !newAuthor.getBookIsbns().isEmpty()) {
+            List<Book> books = new ArrayList<>();
+            newAuthor.getBookIsbns().forEach((bookIsbn) -> {
+                books.add(bookService.getBookByIsbn(bookIsbn));
+            });
+            oldAuthor.setBooks(books);
+        }
+
 
         return authorRepository.save(oldAuthor);
     }

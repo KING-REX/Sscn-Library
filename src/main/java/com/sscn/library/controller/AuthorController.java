@@ -48,7 +48,8 @@ public class AuthorController {
     }
 
     @PutMapping("/{authorId}")
-    public ResponseEntity<Author>  updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
+    public ResponseEntity<Author> updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
+        System.out.println("New" + newAuthor);
         return ResponseEntity.ok(authorService.updateAuthor(newAuthor, authorId));
     }
 

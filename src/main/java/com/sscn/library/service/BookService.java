@@ -1,26 +1,32 @@
 package com.sscn.library.service;
 
+import com.sscn.library.entity.Author;
 import com.sscn.library.entity.Book;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorService authorService;
 
     @Autowired
-    public BookService(BookRepository bookRepository){
+    public BookService(BookRepository bookRepository, @Lazy AuthorService authorService){
         this.bookRepository = bookRepository;
+        this.authorService = authorService;
     }
 
     public List<Book> getAllBooks(){
+
         return bookRepository.findAll();
     }
 
@@ -66,6 +72,14 @@ public class BookService {
 
         if(newBook.getAuthors() != null && !newBook.getAuthors().isEmpty())
             oldBook.setAuthors(newBook.getAuthors());
+        else if(newBook.getAuthorIds() != null && !newBook.getAuthorIds().isEmpty()) {
+            List<Author> authors = new ArrayList<>();
+            newBook.getAuthorIds().forEach((authorId) -> {
+                authors.add(authorService.getAuthorById(authorId));
+            });
+            oldBook.setAuthors(authors);
+
+        }
 
         return bookRepository.save(oldBook);
     }

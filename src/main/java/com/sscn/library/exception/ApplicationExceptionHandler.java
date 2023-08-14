@@ -92,31 +92,11 @@ public class ApplicationExceptionHandler {
 
 
 
-        if(errorMessage.contains(mandatoryEmailError)) {
-//            int beginIndex = errorMessage.indexOf(mandatoryEmailError, 0);
-//            while(beginIndex < errorMessage.length() && beginIndex >= 0) {
-//
-//                errors.put("errorMessage", errorMessage.substring(beginIndex, beginIndex + mandatoryEmailError.length()));
-//
-//                beginIndex = errorMessage.indexOf(mandatoryEmailError, beginIndex + 1);
-//
-//            }
+        if(errorMessage.contains(mandatoryEmailError))
+            errors.put("errorMessage", mandatoryEmailError);
 
-            errors.put("errorMessage", errorMessage);
-        }
-
-        if(errorMessage.contains(invalidEmailError)) {
-//            int beginIndex = errorMessage.indexOf(invalidEmailError, 0);
-//            while(beginIndex < errorMessage.length() && beginIndex >= 0) {
-//
-//                errors.put("errorMessage", errorMessage.substring(beginIndex, beginIndex + invalidEmailError.length()));
-//
-//                beginIndex = errorMessage.indexOf(invalidEmailError, beginIndex + 1);
-//
-//            }
-
-            errors.put("errorMessage", errorMessage);
-        }
+        if(errorMessage.contains(invalidEmailError))
+            errors.put("errorMessage", invalidEmailError);
 
         if(errorMessage.contains(mandatoryPasswordError))
             errors.put("errorMessage", mandatoryPasswordError);

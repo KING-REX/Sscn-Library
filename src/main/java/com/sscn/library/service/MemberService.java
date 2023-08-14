@@ -39,7 +39,7 @@ public class MemberService {
     }
 
     public Member getMemberById(Integer id){
-        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member is not found".formatted(id)));
+        return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member %s is not found".formatted(id)));
     }
 
     public Member getMemberByEmail(String email){
@@ -52,12 +52,8 @@ public class MemberService {
         }
     }
 
-    public Member getMemberByLastName(String lastName){
-        return (Member) memberRepository.findAllByLastName(lastName).orElseThrow(()-> new NotFoundException("Member is not found" + lastName));
-    }
-
     public List<Member> getMembersByLastName(String lastName){
-        return memberRepository.findAllByLastName(lastName).orElseThrow(()-> new NotFoundException("Not found"));
+        return memberRepository.findAllByLastName(lastName).orElseThrow(()-> new NotFoundException("Member %s not found".formatted(lastName)));
     }
 
     public List<Member> getMembersByFullName(String firstName, String lastName){
@@ -107,10 +103,6 @@ public class MemberService {
 
     public void deleteMemberByEmail(String email){
         removeMember(getMemberByEmail(email));
-    }
-
-    public void deleteMemberByLastName(String lastName){
-        removeMember(getMemberByLastName(lastName));
     }
 
     public void deleteMembersByLastName(String lastName){

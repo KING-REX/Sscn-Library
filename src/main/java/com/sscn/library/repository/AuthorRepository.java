@@ -27,6 +27,8 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     Optional<List<Author>> findAllByLastNameAndFirstName(String firstName, String lastName);
     Optional<List<Author>> findAllByLastName(String lastName);
 
+    Optional<List<Author>> findByBooks(Book book);
+
 
 
 //    Optional<List<Author>> findAllByBook(Book book);          No "book" column in Author. It's "books"

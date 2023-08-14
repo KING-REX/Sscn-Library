@@ -1,5 +1,6 @@
 package com.sscn.library.repository;
 
+import com.sscn.library.entity.Author;
 import com.sscn.library.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Optional<List<Book>> findAllByTitle(String Title);
 
     Optional<List<Book>> findAllByDatePurchased(LocalDate datePurchased);
+
+    Optional<List<Book>> findByAuthors(Author author);
 
 //    Optional<List<Book>> findAllByAuthor(Author author);              No "author" column in Book. It's "authors"
 //    Optional<List<Book>> findAllByAuthors(ArrayList<Author> authors); Too complex for the JpaRepository and doesn't even make sense pfft!
