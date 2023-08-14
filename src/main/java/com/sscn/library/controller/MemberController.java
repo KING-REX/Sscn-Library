@@ -73,25 +73,25 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteMemberById(Integer id) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMemberById(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMemberById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{email}.e")
-    public ResponseEntity.BodyBuilder deleteMemberByEmail(String email) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMemberByEmail(@PathVariable String email) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMemberByEmail(email);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public ResponseEntity.BodyBuilder deleteMembersByLastName(String lastName) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMembersByLastName(@PathVariable String lastName) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMembersByLastName(lastName);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public ResponseEntity.BodyBuilder deleteMembersByFullName(String fullName) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMembersByFullName(@PathVariable String fullName) throws IllegalArgumentException, NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2){
             throw new InvalidArgumentException("Full Name is Wrong");

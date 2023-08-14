@@ -63,25 +63,25 @@ public class BookReturnsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteBookReturnById(Integer id) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteBookReturnById(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{bookIsbn}.i")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIsbn(String isbn) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIsbn(@PathVariable String isbn) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByBookIsbn(isbn);
         return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{bookIssuanceId}.b")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIssuanceId(Integer id) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIssuanceId(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByBookIssuanceId(id);
         return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{dateReturned}.d")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByDateReturned(LocalDate dateReturned) throws IllegalArgumentException, NotFoundException {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByDateReturned(dateReturned);
         return ResponseEntity.ok();
     };
