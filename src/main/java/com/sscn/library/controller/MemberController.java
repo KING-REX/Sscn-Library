@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Member>> getAllMembers() throws NotFoundException {
+    public ResponseEntity<List<Member>> getAllMembers() {
         return ResponseEntity.ok(memberService.getAllMembers());
     }
 
@@ -41,12 +41,12 @@ public class MemberController {
     }
 
     @GetMapping("/{lastName}.l")
-    public ResponseEntity<List<Member>> getMembersByLastName(@PathVariable String lastName) {
+    public ResponseEntity<List<Member>> getMembersByLastName(@PathVariable String lastName) throws NotFoundException {
         return ResponseEntity.ok(memberService.getMembersByLastName(lastName));
     }
 
     @GetMapping("/{fullName}.fl")
-    public ResponseEntity<List<Member>> getMembersByFullName(@PathVariable String fullName) {
+    public ResponseEntity<List<Member>> getMembersByFullName(@PathVariable String fullName) throws NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
@@ -55,13 +55,13 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Member>> addMembers(@Valid @RequestBody List<Member> members) throws DuplicateValueException, IllegalStateException {
+    public ResponseEntity<List<Member>> addMembers(@Valid @RequestBody List<Member> members) throws DuplicateValueException, IllegalStateException, IllegalArgumentException {
         List<Member> membersToAdd = memberService.addMembers(members);
         return new ResponseEntity<>(membersToAdd, HttpStatus.CREATED);
     }
 
     @PutMapping("/{memberId}")
-    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member newMember, @PathVariable Integer memberId) {
+    public ResponseEntity<Member> updateMember(@Valid @RequestBody Member newMember, @PathVariable Integer memberId) throws NotFoundException, IllegalArgumentException {
         Member member =  memberService.updateMember(newMember, memberId);
         return ResponseEntity.ok(member);
     }
@@ -73,25 +73,25 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteMemberById(Integer id) throws IllegalArgumentException {
+    public ResponseEntity.BodyBuilder deleteMemberById(Integer id) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMemberById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{email}.e")
-    public ResponseEntity.BodyBuilder deleteMemberByEmail(String email) throws NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMemberByEmail(String email) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMemberByEmail(email);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public ResponseEntity.BodyBuilder deleteMembersByLastName(String lastName) throws NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMembersByLastName(String lastName) throws IllegalArgumentException, NotFoundException {
         memberService.deleteMembersByLastName(lastName);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public ResponseEntity.BodyBuilder deleteMembersByFullName(String fullName) throws NotFoundException {
+    public ResponseEntity.BodyBuilder deleteMembersByFullName(String fullName) throws IllegalArgumentException, NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2){
             throw new InvalidArgumentException("Full Name is Wrong");

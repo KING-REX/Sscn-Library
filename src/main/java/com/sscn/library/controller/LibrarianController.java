@@ -2,7 +2,9 @@ package com.sscn.library.controller;
 
 import com.sscn.library.entity.BookReturns;
 import com.sscn.library.entity.Librarian;
+import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.InvalidArgumentException;
+import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.LibrarianService;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +32,17 @@ public class LibrarianController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Librarian>  getLibrarianById(@PathVariable Integer id) {
+    public ResponseEntity<Librarian> getLibrarianById(@PathVariable Integer id) throws NotFoundException {
         return ResponseEntity.ok(librarianService.getLibrarianById(id));
     }
 
     @GetMapping("/{lastName}.l")
-    public ResponseEntity<List<Librarian>>  getLibrariansByLastName(@PathVariable String lastName) {
+    public ResponseEntity<List<Librarian>> getLibrariansByLastName(@PathVariable String lastName) throws NotFoundException {
         return ResponseEntity.ok(librarianService.getLibrariansByLastName(lastName));
     }
 
     @GetMapping("/{fullName}.fl")
-    public ResponseEntity<List<Librarian>>  getLibrariansByFullName(@PathVariable String fullName) {
+    public ResponseEntity<List<Librarian>> getLibrariansByFullName(@PathVariable String fullName) throws NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
@@ -49,34 +51,34 @@ public class LibrarianController {
     }
 
     @GetMapping("/{email}.e")
-    public ResponseEntity<Librarian>  getLibrarianByEmail(@PathVariable String email) {
+    public ResponseEntity<Librarian> getLibrarianByEmail(@PathVariable String email) throws NotFoundException {
         return ResponseEntity.ok(librarianService.getLibrarianByEmail(email));
     }
 
     @PostMapping
-    public ResponseEntity<List<Librarian>>  addLibrarians(@RequestBody List<Librarian> librarians) {
+    public ResponseEntity<List<Librarian>>  addLibrarians(@RequestBody List<Librarian> librarians) throws DuplicateValueException, IllegalStateException, IllegalArgumentException {
         return ResponseEntity.ok(librarianService.addLibrarians(librarians));
     }
 
     @PutMapping("/{librarianId}")
-    public ResponseEntity<Librarian>  updateLibrarian(@RequestBody Librarian newLibrarian, @PathVariable Integer librarianId) {
+    public ResponseEntity<Librarian>  updateLibrarian(@RequestBody Librarian newLibrarian, @PathVariable Integer librarianId) throws NotFoundException, IllegalArgumentException {
         return ResponseEntity.ok(librarianService.updateLibrarian(newLibrarian, librarianId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteLibrarianById(@PathVariable Integer id) {
+    public ResponseEntity.BodyBuilder deleteLibrarianById(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
         librarianService.deleteLibrarianById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public ResponseEntity.BodyBuilder deleteLibrariansByLastName(@PathVariable String lastName) {
+    public ResponseEntity.BodyBuilder deleteLibrariansByLastName(@PathVariable String lastName) throws IllegalArgumentException, NotFoundException {
         librarianService.deleteLibrarianByLastName(lastName);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public ResponseEntity.BodyBuilder deleteLibrariansByFullName(@PathVariable String fullName) {
+    public ResponseEntity.BodyBuilder deleteLibrariansByFullName(@PathVariable String fullName) throws IllegalArgumentException, NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
@@ -86,7 +88,7 @@ public class LibrarianController {
     }
 
     @DeleteMapping("/{email}.e")
-    public ResponseEntity.BodyBuilder deleteLibrarianByEmail(@PathVariable String email) {
+    public ResponseEntity.BodyBuilder deleteLibrarianByEmail(@PathVariable String email) throws IllegalArgumentException, NotFoundException {
         librarianService.deleteLibrarianByEmail(email);
         return ResponseEntity.ok();
     }

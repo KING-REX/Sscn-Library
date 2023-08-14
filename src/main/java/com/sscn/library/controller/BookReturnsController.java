@@ -28,7 +28,7 @@ public class BookReturnsController {
     };
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookReturns>  getBookReturnById(@PathVariable Integer id) {
+    public ResponseEntity<BookReturns> getBookReturnById(@PathVariable Integer id) throws NotFoundException {
         return ResponseEntity.ok(bookReturnsService.getBookReturnById(id));
     }
 
@@ -37,51 +37,51 @@ public class BookReturnsController {
 //    }
 
     @GetMapping("/{bookIsbn}.i")
-    public ResponseEntity<List<BookReturns>>  getBookReturnsByBookIsbn(@PathVariable String bookIsbn) {
+    public ResponseEntity<List<BookReturns>> getBookReturnsByBookIsbn(@PathVariable String bookIsbn) throws NotFoundException {
         return ResponseEntity.ok(bookReturnsService.getBookReturnsByBookIsbn(bookIsbn));
     }
 
     @GetMapping("/{bookIssuanceId}.b")
-    public ResponseEntity<List<BookReturns>>  getBookReturnsByBookIssuanceId(@PathVariable Integer bookIssuanceId) {
+    public ResponseEntity<List<BookReturns>> getBookReturnsByBookIssuanceId(@PathVariable Integer bookIssuanceId) throws NotFoundException {
         return ResponseEntity.ok(bookReturnsService.getBookReturnsByBookIssuanceId(bookIssuanceId));
 
     }
 
     @GetMapping("/{dateReturned}.d")
-    public ResponseEntity<List<BookReturns>>  getBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) {
+    public ResponseEntity<List<BookReturns>> getBookReturnsByDateReturned(@PathVariable LocalDate dateReturned) throws NotFoundException {
         return ResponseEntity.ok(bookReturnsService.getBookReturnsByDateReturned(dateReturned));
     }
 
     @PostMapping
-    public ResponseEntity<List<BookReturns>>  addBookReturns(@RequestBody List<BookReturns> bookReturns) {
+    public ResponseEntity<List<BookReturns>> addBookReturns(@RequestBody List<BookReturns> bookReturns) throws DuplicateValueException, IllegalStateException, IllegalArgumentException {
         return ResponseEntity.ok(bookReturnsService.addBookReturns(bookReturns));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookReturns>  updateBookReturns(@RequestBody BookReturns newBookReturns, @PathVariable Integer id) {
+    public ResponseEntity<BookReturns> updateBookReturns(@RequestBody BookReturns newBookReturns, @PathVariable Integer id) throws NotFoundException, IllegalArgumentException {
         return ResponseEntity.ok(bookReturnsService.updateBookReturns(newBookReturns, id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteBookReturnById(Integer id) {
+    public ResponseEntity.BodyBuilder deleteBookReturnById(Integer id) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{bookIsbn}.i")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIsbn(String isbn) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIsbn(String isbn) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByBookIsbn(isbn);
         return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{bookIssuanceId}.b")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIssuanceId(Integer id) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByBookIssuanceId(Integer id) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByBookIssuanceId(id);
         return ResponseEntity.ok();
     };
 
     @DeleteMapping("/{dateReturned}.d")
-    public ResponseEntity.BodyBuilder deleteBookReturnsByDateReturned(LocalDate dateReturned) {
+    public ResponseEntity.BodyBuilder deleteBookReturnsByDateReturned(LocalDate dateReturned) throws IllegalArgumentException, NotFoundException {
         bookReturnsService.deleteBookReturnsByDateReturned(dateReturned);
         return ResponseEntity.ok();
     };

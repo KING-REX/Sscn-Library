@@ -34,10 +34,6 @@ public class MemberService {
         return members;
     }
 
-    public void deleteMemberById(Integer id){
-        memberRepository.deleteById(id);
-    }
-
     public Member getMemberById(Integer id){
         return memberRepository.findById(id).orElseThrow(() -> new NotFoundException("Member %s is not found".formatted(id)));
     }
@@ -71,18 +67,11 @@ public class MemberService {
 
         return memberList;
     }
-    public void deleteAllMembers(){
-        memberRepository.deleteAll();
-    }
-
-    public void removeMember(Member member){
-        memberRepository.delete(member);
-    }
 
     public Member updateMember(Member newMember, int memberId){
         Member oldMember = getMemberById(memberId);
 
-        System.out.println(oldMember);
+//        System.out.println(oldMember);
 
         if(newMember.getFirstName() != null && !newMember.getFirstName().isEmpty()){
             oldMember.setFirstName(newMember.getFirstName());
@@ -99,6 +88,14 @@ public class MemberService {
         return memberRepository.save(oldMember);
     }
 
+    public void removeMember(Member member){
+        memberRepository.delete(member);
+    }
+
+    public void deleteMemberById(Integer id){
+        memberRepository.deleteById(id);
+    }
+
 
 
     public void deleteMemberByEmail(String email){
@@ -113,6 +110,7 @@ public class MemberService {
         getMembersByFullName(firstName, lastName).forEach(this::removeMember);
     }
 
-
-
+    public void deleteAllMembers(){
+        memberRepository.deleteAll();
+    }
 }

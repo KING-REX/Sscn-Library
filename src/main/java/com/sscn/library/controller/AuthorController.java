@@ -2,7 +2,9 @@ package com.sscn.library.controller;
 
 
 import com.sscn.library.entity.Author;
+import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.InvalidArgumentException;
+import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +22,17 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable Integer id) {
+    public ResponseEntity<Author> getAuthorById(@PathVariable Integer id) throws NotFoundException {
         return ResponseEntity.ok(authorService.getAuthorById(id));
     }
 
     @GetMapping("/{lastName}.l")
-    public ResponseEntity<List<Author>> getAuthorsByLastName(@PathVariable String lastName) {
+    public ResponseEntity<List<Author>> getAuthorsByLastName(@PathVariable String lastName) throws NotFoundException {
         return ResponseEntity.ok(authorService.getAuthorsByLastName(lastName));
     }
 
     @GetMapping("/{fullName}.fl")
-    public ResponseEntity<List<Author>> getAuthorsByFullName(@PathVariable String fullName) {
+    public ResponseEntity<List<Author>> getAuthorsByFullName(@PathVariable String fullName) throws NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
@@ -43,30 +45,30 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Author>> addAuthors(@RequestBody List<Author> authors) {
+    public ResponseEntity<List<Author>> addAuthors(@RequestBody List<Author> authors) throws DuplicateValueException, IllegalStateException, IllegalArgumentException {
         return ResponseEntity.ok(authorService.addAuthors(authors));
     }
 
     @PutMapping("/{authorId}")
-    public ResponseEntity<Author> updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) {
+    public ResponseEntity<Author> updateAuthor(@RequestBody Author newAuthor, @PathVariable Integer authorId) throws NotFoundException, IllegalArgumentException {
         System.out.println("New" + newAuthor);
         return ResponseEntity.ok(authorService.updateAuthor(newAuthor, authorId));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder removeAuthorById(@PathVariable Integer id) {
+    public ResponseEntity.BodyBuilder removeAuthorById(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
         authorService.removeAuthorById(id);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{lastName}.l")
-    public ResponseEntity.BodyBuilder removeAuthorsByLastName(@PathVariable String lastName) {
+    public ResponseEntity.BodyBuilder removeAuthorsByLastName(@PathVariable String lastName) throws IllegalArgumentException, NotFoundException {
         authorService.removeAuthorsByLastName(lastName);
         return ResponseEntity.ok();
     }
 
     @DeleteMapping("/{fullName}.fl")
-    public ResponseEntity.BodyBuilder removeAuthorsByFullName(@PathVariable String fullName) {
+    public ResponseEntity.BodyBuilder removeAuthorsByFullName(@PathVariable String fullName) throws IllegalArgumentException, NotFoundException {
         String[] names = fullName.split("-");
         if(names.length > 2)
             throw new InvalidArgumentException("Syntax for full name is wrong!");
