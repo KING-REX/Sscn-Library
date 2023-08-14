@@ -21,34 +21,8 @@ import java.util.Optional;
 public class SscnLibraryApplication {
 
 	@Bean
-	CommandLineRunner runner(BookRepository bookRepository, AuthorRepository authorRepository, UserService userService) {
+	CommandLineRunner runner() {
 		return args -> {
-
-//			Author john = new Author("G.P", "Taylor");
-//			Author lettuce = new Author("Lettuce", "Correl");
-//			Author mary = new Author("Mary", "Doe");
-//
-//			Book book1 = new Book("ISBN001", "Shadowmancer", LocalDate.of(2004, 8, 13), 30, 30);
-//			book1.getAuthors().addAll(List.of(john, lettuce));
-//
-////			authorRepository.saveAll(List.of(john, lettuce, mary));
-//
-//
-//			bookRepository.save(book1);
-//			authorRepository.save(mary);
-
-
-//			Optional<List<Author>> findBlah = authorRepository.findAllByLastName("Doe");
-//			findBlah.ifPresent(a -> System.out.println(a.toString()));
-//			findBlah.ifPresent(System.out::println);
-
-//			authorRepository.findAllByLastName("Doe").ifPresent(authorList -> authorList.forEach(System.out::println));
-
-
-//			User user = new User("admin", "secret", "ADMIN");
-//
-//			userService.addUser(user);
-
 		};
 	}
 	public static void main(String[] args) {
