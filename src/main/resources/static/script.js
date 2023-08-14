@@ -3,7 +3,7 @@ function submitForm() {
     var email = document.getElementById("password").value;
 
     // Send data to the backend
-    fetch('/login', {
+    fetch('/login.html', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -6,6 +6,7 @@ import com.sscn.library.entity.Book;
 import com.sscn.library.entity.User;
 import com.sscn.library.repository.AuthorRepository;
 import com.sscn.library.repository.BookRepository;
+import com.sscn.library.repository.UserRepository;
 import com.sscn.library.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,8 +22,10 @@ import java.util.Optional;
 public class SscnLibraryApplication {
 
 	@Bean
-	CommandLineRunner runner() {
+	CommandLineRunner runner(UserRepository userRepository) {
+
 		return args -> {
+			User user = new User("admin", "secret", "ADMIN");
 		};
 	}
 	public static void main(String[] args) {
