@@ -4,6 +4,7 @@ import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.BookReturns;
 import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.BookReturnsRepository;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,25 @@ public class BookReturnsService {
     public BookReturns addBookReturns(BookReturns bookReturns) {
         if(bookReturns.getId() != null && bookReturnsRepository.existsById(bookReturns.getId()))
             throw new DuplicateValueException("Book Returns %s already exists".formatted(bookReturns.getId()));
+        else if(bookReturns.getId() != null)
+            throw new InvalidArgumentException("Book Returns Id is auto-generated. Don't give it a value!");
+
+        if(bookReturns.getBookIssued() == null) {
+            if(bookReturns.getBookIsbn() != null && !bookReturns.getBookIsbn().isEmpty())
+                bookReturns.setBookIssued(bookService.getBookByIsbn(bookReturns.getBookIsbn()));
+            else
+                throw new InvalidArgumentException("Book Issued Isbn is invalid!");
+        }
+
+        if(bookReturns.getBookIssuance() == null) {
+            if(bookReturns.getBookIssuanceId() != null)
+                bookReturns.setBookIssuance(bookIssuanceService.getBookIssuanceById(bookReturns.getBookIssuanceId()));
+            else
+                throw new InvalidArgumentException("Book Issuance Id is null!");
+        }
+
+        if(bookReturns.getDateReturned() == null)
+            throw new InvalidArgumentException("Date returned attribute cannot be null!");
 
         return bookReturnsRepository.save(bookReturns);
     }
@@ -69,8 +89,14 @@ public class BookReturnsService {
 
         if(newBookReturns.getBookIssued() != null && newBookReturns.getBookIssued().getIsbn() != null)
             oldBookReturns.setBookIssued(newBookReturns.getBookIssued());
+        else if(newBookReturns.getBookIsbn() != null && !newBookReturns.getBookIsbn().isEmpty())
+            oldBookReturns.setBookIssued(bookService.getBookByIsbn(newBookReturns.getBookIsbn()));
+
         if(newBookReturns.getBookIssuance() != null && newBookReturns.getBookIssuance().getId() != null)
             oldBookReturns.setBookIssuance(newBookReturns.getBookIssuance());
+        else if(newBookReturns.getReturnsBookIssuanceId() != null)
+            oldBookReturns.setBookIssuance(bookIssuanceService.getBookIssuanceById(newBookReturns.getReturnsBookIssuanceId()));
+
         if(newBookReturns.getDateReturned() != null && (newBookReturns.getDateReturned().isBefore(LocalDate.now()) || newBookReturns.getDateReturned().isEqual(LocalDate.now())))
             oldBookReturns.setDateReturned(newBookReturns.getDateReturned());
 

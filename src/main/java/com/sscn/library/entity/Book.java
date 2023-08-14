@@ -35,7 +35,7 @@ public class Book implements Serializable {
     private Integer totalCopies;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "books")
     private List<Author> authors;
 
     @JsonProperty("authors")

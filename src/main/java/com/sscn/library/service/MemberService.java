@@ -2,6 +2,7 @@ package com.sscn.library.service;
 
 import com.sscn.library.entity.Member;
 import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -18,20 +19,6 @@ public class MemberService {
 
     public List<Member> getAllMembers(){
         return memberRepository.findAll();
-    }
-
-    public Member addMember(Member member)  {
-        if(!memberRepository.existsByEmail(member.getEmail())){
-            return memberRepository.save(member);
-        }
-        else{
-            throw new DuplicateValueException("Member already exists");
-        }
-    }
-
-    public List<Member> addMembers(List<Member> members){
-        members.forEach(this::addMember);
-        return members;
     }
 
     public Member getMemberById(Integer id){
@@ -66,6 +53,26 @@ public class MemberService {
         }
 
         return memberList;
+    }
+
+    public Member addMember(Member member)  {
+        if(member.getId() != null && memberRepository.existsById(member.getId()))
+            throw new DuplicateValueException("Librarian %s already exists.".formatted(member.getId()));
+        else if(member.getId() != null)
+            throw new InvalidArgumentException("Mamber Id is auto-generated. Don't give it a value!");
+
+        if(member.getFirstName() == null || member.getFirstName().isEmpty())
+            throw new InvalidArgumentException("First name attribute is invalid!");
+
+        if(member.getLastName() == null || member.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name attribute is invalid!");
+
+        return memberRepository.save(member);
+    }
+
+    public List<Member> addMembers(List<Member> members){
+        members.forEach(this::addMember);
+        return members;
     }
 
     public Member updateMember(Member newMember, int memberId){

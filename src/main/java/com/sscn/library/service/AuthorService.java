@@ -3,6 +3,7 @@ package com.sscn.library.service;
 import com.sscn.library.entity.Author;
 import com.sscn.library.entity.Book;
 import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,27 @@ public class AuthorService {
     public Author addAuthor(Author author) {
         if(author.getId() != null && authorRepository.existsById(author.getId()))
             throw new DuplicateValueException("Author %s already exists.".formatted(author.getId()));
+        else if(author.getId() != null)
+            throw new InvalidArgumentException("Author Id is auto-generated. Don't give it a value!");
+
+        if(author.getFirstName() == null || author.getFirstName().isEmpty())
+            throw new InvalidArgumentException("First name attribute cannot be null!");
+
+        if(author.getLastName() == null || author.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name attribute cannot be null!");
+
+        if(author.getBooks() == null) {
+            if(author.getBookIsbns() != null) {
+                List<Book> books = new ArrayList<>();
+                author.getBookIsbns().forEach((bookIsbn) -> {
+                    books.add(bookService.getBookByIsbn(bookIsbn));
+                });
+                author.setBooks(books);
+            }
+            else
+                author.setBooks(new ArrayList<>());
+        }
+
 
         return authorRepository.save(author);
     }

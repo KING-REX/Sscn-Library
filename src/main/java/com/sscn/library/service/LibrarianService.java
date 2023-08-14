@@ -3,6 +3,7 @@ package com.sscn.library.service;
 import com.sscn.library.entity.Author;
 import com.sscn.library.entity.Librarian;
 import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.LibrarianRepository;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,17 @@ public class LibrarianService {
     public Librarian addLibrarian(Librarian librarian) {
         if(librarian.getId() != null && librarianRepository.existsById(librarian.getId()))
             throw new DuplicateValueException("Librarian %s already exists.".formatted(librarian.getId()));
+        else if(librarian.getId() != null)
+            throw new InvalidArgumentException("Librarian Id is auto-generated. Don't give it a value!");
+
+        if(librarian.getFirstName() == null || librarian.getFirstName().isEmpty())
+            throw new InvalidArgumentException("First name attribute is invalid!");
+
+        if(librarian.getLastName() == null || librarian.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name attribute is invalid!");
+
+        if(librarian.getPassword() == null)
+            throw new InvalidArgumentException("Password cannot be empty!");
 
         if(librarian.getEmail() != null && librarianRepository.existsByEmail(librarian.getEmail()))
             throw new DuplicateValueException("Librarian with email %s already exists.".formatted(librarian.getEmail()));

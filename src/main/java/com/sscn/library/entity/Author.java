@@ -31,7 +31,7 @@ public class Author implements Serializable {
     private String lastName;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
 //    @JoinTable(name = "authors_books",joinColumns = {@JoinColumn(name = "author_id")},inverseJoinColumns = {@JoinColumn(name = "book_id")})
     private List<Book> books;
 

@@ -20,8 +20,10 @@ public interface BookIssuanceRepository extends JpaRepository<BookIssuance, Inte
 
     boolean existsByReturnStatus(ReturnStatus returnStatus);
 
-    Optional<List<BookIssuance>> findAllByBook(Book book);
-    Optional<List<BookIssuance>> findAllByIssuedTo(Member issuedTo);
+    Optional<BookIssuance> findByBook(Book book);
+    Optional<BookIssuance> findByIssuedTo(Member issuedTo);
+
+    Optional<BookIssuance> findByDateIssued(LocalDate dateIssued);
     Optional<List<BookIssuance>> findAllByDateIssued(LocalDate dateIssued);
     Optional<List<BookIssuance>> findAllByDateDue(LocalDate dateDue);
     Optional<List<BookIssuance>> findAllByReturnStatus(ReturnStatus returnStatus);

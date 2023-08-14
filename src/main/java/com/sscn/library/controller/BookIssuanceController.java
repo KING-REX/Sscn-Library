@@ -3,6 +3,7 @@ package com.sscn.library.controller;
 import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.Member;
+import com.sscn.library.entity.ReturnStatus;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.BookIssuanceService;
@@ -34,8 +35,9 @@ public class BookIssuanceController {
     }
 
     @GetMapping("/{bookIsbn}.i")
-    public ResponseEntity< List<BookIssuance>> getBookIssuancesByBook(@PathVariable Book book) throws NotFoundException {
-        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByBook(book));
+    public ResponseEntity< List<BookIssuance>> getBookIssuancesByBookIsbn(@PathVariable String bookIsbn) throws NotFoundException {
+        System.out.println(bookIsbn);
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByBookIsbn(bookIsbn));
     }
 
     @GetMapping("/{dateIssued}.di")
@@ -102,6 +104,12 @@ public class BookIssuanceController {
     @DeleteMapping("/{memberId}.mi")
     public ResponseEntity.BodyBuilder deleteBookIssuancesByMemberId(@PathVariable Integer memberId) throws IllegalArgumentException, NotFoundException {
         bookIssuanceService.deleteBookIssuancesByMemberId(memberId);
+        return ResponseEntity.ok();
+    }
+
+    @DeleteMapping("/{returnStatus}.rs")
+    public ResponseEntity.BodyBuilder deleteBookIssuancesByReturnStatus(@PathVariable ReturnStatus returnStatus) throws IllegalArgumentException, NotFoundException {
+        bookIssuanceService.deleteBookIssuancesByReturnStatus(returnStatus);
         return ResponseEntity.ok();
     }
 }

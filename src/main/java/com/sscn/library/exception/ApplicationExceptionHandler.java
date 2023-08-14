@@ -3,6 +3,7 @@ package com.sscn.library.exception;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +16,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    public Map<String, String> handleValidationErrors(HttpMediaTypeNotAcceptableException exception){
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", exception.getMessage());
+        errors.put("supportedTypes", exception.getSupportedMediaTypes().toString());
+        return errors;
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

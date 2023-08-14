@@ -3,6 +3,7 @@ package com.sscn.library.service;
 import com.sscn.library.entity.Author;
 import com.sscn.library.entity.Book;
 import com.sscn.library.exception.DuplicateValueException;
+import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,30 @@ public class BookService {
     public Book addBook(Book book){
         if(book.getIsbn() != null && bookRepository.existsByIsbn(book.getIsbn()))
             throw new DuplicateValueException("Book %s already exists.".formatted(book.getIsbn()));
+
+        if(book.getTitle() == null || book.getTitle().isEmpty())
+            throw new InvalidArgumentException("Title attribute is invalid!");
+
+        if(book.getAvailableCopies() == null || book.getAvailableCopies() < 0)
+            throw new InvalidArgumentException("Available Copies attribute is invalid!");
+
+        if(book.getTotalCopies() == null || book.getTotalCopies() < 0)
+            throw new InvalidArgumentException("Total Copies attribute is invalid!");
+
+        if(book.getDatePurchased() == null)
+            throw new InvalidArgumentException("Date Purchased attribute cannot be null!");
+
+        if(book.getAuthors() == null) {
+            if(book.getAuthorIds() != null) {
+                List<Author> authors = new ArrayList<>();
+                book.getAuthorIds().forEach((authorId) -> {
+                    authors.add(authorService.getAuthorById(authorId));
+                });
+                book.setAuthors(authors);
+            }
+            else
+                book.setAuthors(new ArrayList<>());
+        }
 
         return bookRepository.save(book);
     }
