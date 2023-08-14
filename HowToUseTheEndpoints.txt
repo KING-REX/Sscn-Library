@@ -1,0 +1,112 @@
+ENDPOINT DETAILS:
+
+This shouldn't consume much since you already have the entities and their attributes...
+
+1. For the GET requests:
+	This is basically sending a get request to retrieve information based on the parameters and how they are passed
+	(as explained in the endpoints document). For example, a simple get request to get member(s) with the email,
+	johndoe@gmail.com (assuming he exists)
+	
+	method: GET
+	action: "/api/v1/member/johndoe@gmail.com.e"
+	
+	requestBody: null								//Doesn't need a request body
+	
+	returns: 
+		{
+			"id": 1,
+			"firstName": "John",
+			"lastName": "Doe",
+			"email": "johndoe@gmail.com"
+		}
+			since he exists. If he doesn't,
+		{
+			"errorMessage": "Email Not Found: johndoe@gmail.com"
+		}
+		
+	Not using any search parameter will return all the members in the database as an array (in the form of a 
+	json object). The array can be empty.
+
+2. For the POST requests: 
+	When you send a post request, to add entity(ies), what you'll be sending as the body of your request will be
+	an array of JSON objects, containing the details of the entities (even if it's one) you want to add to the 
+	database. For example, this is a request (from a html form) that will add 2 authors to the database...
+	
+	method: POST
+	action: "/api/v1/authors"
+	
+	requestBody: 
+		[
+			{
+				"firstName": "John",
+				"lastName": "Doe",
+				"books": []
+			},
+			{
+				"firstName": "Correl",
+				"lastName": "Lettuce",
+				"books": ["ISBN001", "ISBN003"]
+			}
+		]
+		
+	returns: 	
+		same object that was passed to it if it is successful, or,
+		
+		{
+			"errorMessage": "the_detail_of_the_error_message_will_appear_here"
+		}
+			if an error occurs.
+	
+	This request will return a JSON object of what was added to the database. The parameters for the books added 
+	should be the isbn of already existing books (just like the case with Correl). If they're not yet existing, 
+	an empty array should be passed.
+	
+3. For the PUT requests:
+	All put requests are used to update entity records in the database. This request has a request body, just like
+	the post request, with only the attributes that should be changed and their new values. The update request is
+	only filtered by id (or isbn as the case may be), so this primary key will be passed to the url (as seen in
+	the document about endpoints...). For example, a request to update the author Correl we created in the post
+	example above, changing only his first name to Michael (and assuming his id is 2)...
+	
+	method: PUT
+	action: "/api/v1/authors/2"
+	
+	requestBody: 
+		{
+			"firstName": "Michael"
+		}
+		
+	returns:
+		{
+			"firstName": "Michael",
+			"lastName": "Lettuce",
+			"books": ["ISBN001", "ISBN003"]
+		}
+			if the update was successful, or
+		{
+			"errorMessage": "the detail of the error message will appear here"
+		}
+			if an error occurs.
+			
+	So basically, the request returns the new record as a json object that has been stored in the database 
+	if it is successful, and a json object that contains the error message, if the update wasn't successful.
+	
+4. For the DELETE requests:
+	The delete requests are basically like the get requests. Not adding any search parameter will delete all the 
+	entity records, while adding a search parameter will filter the delete. For example, a request to delete all
+	the book issuance records issued on "2023-08-12"...
+	
+	method: DELETE
+	action: "/api/v1/bookIssuance/2023-08-12.di"
+	
+	requestBody: null									//Doesn't need a request body
+	
+	returns: 
+		null
+			if successful, or
+		{
+			"errorMessage": "Book Issuance Record issued on 2023-08-12 not found"
+		}
+			if no record was found on the specified date (or any other error that surfaces)
+			
+	I hope the documents are well understood. If any questions, relate to me.
