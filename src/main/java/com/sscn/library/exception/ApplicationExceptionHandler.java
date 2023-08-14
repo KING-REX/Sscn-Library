@@ -23,7 +23,8 @@ public class ApplicationExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         errors.put("errorMessage", exception.getMessage());
         errors.put("supportedTypes", exception.getSupportedMediaTypes().toString());
-        return errors;
+//        return errors;
+        return null;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
