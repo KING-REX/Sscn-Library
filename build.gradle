@@ -25,7 +25,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// https://mvnrepository.com/artifact/org.json/json
+//	implementation 'org.json:json:20230618'
+
+	// https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api
+	implementation 'jakarta.json:jakarta.json-api:2.1.2'
+
+	// https://mvnrepository.com/artifact/org.eclipse.parsson/jakarta.json
+	implementation 'org.eclipse.parsson:jakarta.json:1.1.4'
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'

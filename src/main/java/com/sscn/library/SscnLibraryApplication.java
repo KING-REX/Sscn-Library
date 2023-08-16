@@ -25,7 +25,7 @@ public class SscnLibraryApplication {
 	CommandLineRunner runner(UserRepository userRepository) {
 
 		return args -> {
-			User user = new User("admin", "secret", "ADMIN");
+//			User user = new User("admin", "secret", "ADMIN");
 		};
 	}
 	public static void main(String[] args) {

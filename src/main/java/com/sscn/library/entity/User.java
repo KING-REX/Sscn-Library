@@ -1,5 +1,7 @@
 package com.sscn.library.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +12,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails
@@ -52,11 +56,6 @@ public class User implements UserDetails
     return this.authorities.stream()
         .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
         .collect(Collectors.toList());
-  }
-
-  public void setAuthorities(List<Authority> authorities)
-  {
-    this.authorities = authorities;
   }
 
   public void setAuthorities(String... authorities)
