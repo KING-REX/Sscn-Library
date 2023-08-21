@@ -8,9 +8,7 @@ import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuthorService {
@@ -70,29 +68,35 @@ public class AuthorService {
     }
 
     public Author addAuthor(Author author) {
-        if(author.getId() != null && authorRepository.existsById(author.getId()))
-            throw new DuplicateValueException("Author %s already exists.".formatted(author.getId()));
-        else if(author.getId() != null)
+        if(author.getId() != null) {
+            if(authorRepository.existsById(author.getId()))
+                throw new DuplicateValueException("Author %s already exists.".formatted(author.getId()));
             throw new InvalidArgumentException("Author Id is auto-generated. Don't give it a value!");
-
-        if(author.getFirstName() == null || author.getFirstName().isEmpty())
-            throw new InvalidArgumentException("First name attribute cannot be null!");
-
-        if(author.getLastName() == null || author.getLastName().isEmpty())
-            throw new InvalidArgumentException("Last name attribute cannot be null!");
-
-        if(author.getBooks() == null) {
-            if(author.getBookIsbns() != null) {
-                List<Book> books = new ArrayList<>();
-                author.getBookIsbns().forEach((bookIsbn) -> {
-                    books.add(bookService.getBookByIsbn(bookIsbn));
-                });
-                author.setBooks(books);
-            }
-            else
-                author.setBooks(new ArrayList<>());
         }
 
+        if(author.getFirstName() == null) {
+            throw new InvalidArgumentException("First name cannot be null!");
+        }
+        else if(author.getFirstName().isEmpty()) {
+            throw new InvalidArgumentException("First name cannot be empty!");
+        }
+
+        if(author.getLastName() == null)
+            throw new InvalidArgumentException("Last name cannot be null!");
+        else if(author.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name cannot be empty!");
+
+        //JSON ignores the "books" attribute, hence the reason why "bookIsbns" is used
+        //JSON also uses the empty constructor while parsing, meaning "books"/"bookIsbns" cannot be null, hence the
+        //reason why checking if they're null is skipped
+        if (!author.getBookIsbns().isEmpty()) {
+            List<Book> books = new ArrayList<>();
+            author.getBookIsbns().forEach((bookIsbn) -> {
+                books.add(bookService.getBookByIsbn(bookIsbn));
+            });
+            author.setBooks(books);
+            author.setBookIsbns(new ArrayList<>());
+        }
 
         return authorRepository.save(author);
     }
@@ -106,24 +110,45 @@ public class AuthorService {
     public Author updateAuthor(Author newAuthor, Integer authorId) {
         Author oldAuthor = getAuthorById(authorId);
 
-        System.out.println(oldAuthor);
+//        System.out.println(oldAuthor);
 
-        if(newAuthor.getFirstName() != null && !newAuthor.getFirstName().isEmpty())
+        if(newAuthor.getFirstName() != null) {
+            if(!newAuthor.getFirstName().isEmpty())
+                throw new InvalidArgumentException("First name cannot be empty!");
             oldAuthor.setFirstName(newAuthor.getFirstName());
-
-        if(newAuthor.getLastName() != null && !newAuthor.getLastName().isEmpty())
-            oldAuthor.setLastName(newAuthor.getLastName());
-
-        if(newAuthor.getBooks() != null && !newAuthor.getBooks().isEmpty())
-            oldAuthor.setBooks(newAuthor.getBooks());
-        else if(newAuthor.getBookIsbns() != null && !newAuthor.getBookIsbns().isEmpty()) {
-            List<Book> books = new ArrayList<>();
-            newAuthor.getBookIsbns().forEach((bookIsbn) -> {
-                books.add(bookService.getBookByIsbn(bookIsbn));
-            });
-            oldAuthor.setBooks(books);
         }
 
+        if(newAuthor.getLastName() != null) {
+            if(newAuthor.getLastName().isEmpty())
+                throw new InvalidArgumentException("Last name cannot be empty!");
+            oldAuthor.setLastName(newAuthor.getLastName());
+        }
+
+        //JSON ignores the "books" attribute, hence the reason why "bookIsbns" is used
+        //JSON also uses the empty constructor while parsing, meaning "books"/"bookIsbns" cannot be null, hence the
+        //reason why checking if they're null is skipped
+        if (!newAuthor.getBookIsbns().isEmpty()) {
+            Set<Book> books = new LinkedHashSet<>();
+            if(newAuthor.getBookIsbns().get(0).equals("...")) {
+                books.addAll(oldAuthor.getBooks());
+            }
+            else if(newAuthor.getBookIsbns().get(0).equals("-")) {
+                List<String> booksToRemove = newAuthor.getBookIsbns().subList(1, newAuthor.getBookIsbns().size());
+                books.addAll(oldAuthor.getBooks());
+                books.removeIf(author -> (booksToRemove.contains(author.getIsbn())));
+            }
+            System.out.println("Books length before adding: " + books.size());
+            newAuthor.getBookIsbns().forEach((authorIsbn) -> {
+                if(!authorIsbn.equals("...") && !newAuthor.getBookIsbns().contains("-"))
+                    books.add(bookService.getBookByIsbn(authorIsbn));
+            });
+            System.out.println("Books length after adding: " + books.size());
+            System.out.println("Books: " + books);
+            oldAuthor.setBooks(new ArrayList<>(books));
+            oldAuthor.setBookIsbns(new ArrayList<>());
+        }
+        else
+            oldAuthor.setBooks(new ArrayList<>());
 
         return authorRepository.save(oldAuthor);
     }
@@ -148,7 +173,9 @@ public class AuthorService {
     }
 
     public void removeAllAuthors() {
+        System.out.println("Was reached!");
         authorRepository.deleteAll();
+        System.out.println("Was passed!");
     }
 
 }

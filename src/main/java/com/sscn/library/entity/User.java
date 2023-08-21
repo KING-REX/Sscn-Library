@@ -28,7 +28,7 @@ public class User implements UserDetails
   @Column(nullable = false)
   private String password;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Authority> authorities;
 
   public User()
@@ -54,7 +54,7 @@ public class User implements UserDetails
   public Collection<? extends GrantedAuthority> getAuthorities()
   {
     return this.authorities.stream()
-        .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
+        .map(authority -> new SimpleGrantedAuthority(authority.getAuthority().name()))
         .collect(Collectors.toList());
   }
 

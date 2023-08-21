@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -47,28 +49,38 @@ public class BookService {
         if(book.getIsbn() != null && bookRepository.existsByIsbn(book.getIsbn()))
             throw new DuplicateValueException("Book %s already exists.".formatted(book.getIsbn()));
 
-        if(book.getTitle() == null || book.getTitle().isEmpty())
-            throw new InvalidArgumentException("Title attribute is invalid!");
+        if(book.getTitle() == null)
+            throw new InvalidArgumentException("Title cannot be null!");
+        if(book.getTitle().isEmpty())
+            throw new InvalidArgumentException("Title cannot be empty!");
 
-        if(book.getAvailableCopies() == null || book.getAvailableCopies() < 0)
-            throw new InvalidArgumentException("Available Copies attribute is invalid!");
+        if(book.getTotalCopies() == null)
+            throw new InvalidArgumentException("Total Copies cannot be null!");
+        if(book.getTotalCopies() < 0)
+            throw new InvalidArgumentException("Total Copies cannot be less than zero!");
 
-        if(book.getTotalCopies() == null || book.getTotalCopies() < 0)
-            throw new InvalidArgumentException("Total Copies attribute is invalid!");
+        if(book.getAvailableCopies() == null)
+            book.setAvailableCopies(book.getTotalCopies());
+        if(book.getAvailableCopies() < 0)
+            throw new InvalidArgumentException("Available Copies cannot be less than zero!");
+        else if(book.getAvailableCopies() > book.getTotalCopies())
+            throw new InvalidArgumentException("Available Copies cannot be more than total copies!");
 
         if(book.getDatePurchased() == null)
             throw new InvalidArgumentException("Date Purchased attribute cannot be null!");
+        if(book.getDatePurchased().isAfter(LocalDate.now()))
+            throw new InvalidArgumentException("Date purchased must be less than or equal to the current date!");
 
-        if(book.getAuthors() == null) {
-            if(book.getAuthorIds() != null) {
-                List<Author> authors = new ArrayList<>();
-                book.getAuthorIds().forEach((authorId) -> {
-                    authors.add(authorService.getAuthorById(authorId));
-                });
-                book.setAuthors(authors);
-            }
-            else
-                book.setAuthors(new ArrayList<>());
+        //JSON ignores the "authors" attribute, hence the reason why "authorIds" is used
+        //JSON also uses the empty constructor while parsing, meaning "authors"/"authorIds" cannot be null, hence the
+        //reason why checking if they're null is skipped
+        if(!book.getAuthorIds().isEmpty()) {
+            List<Author> authors = new ArrayList<>();
+            book.getAuthorIds().forEach((authorId) -> {
+                authors.add(authorService.getAuthorById(Integer.parseInt(authorId)));
+            });
+            book.setAuthors(authors);
+            book.setAuthorIds(new ArrayList<>());
         }
 
         return bookRepository.save(book);
@@ -83,28 +95,54 @@ public class BookService {
     public Book updateBook(Book newBook, String isbn) {
         Book oldBook = getBookByIsbn(isbn);
 
-        if(newBook.getTitle() != null && !newBook.getTitle().isEmpty())
+        if(newBook.getTitle() != null) {
+            if(newBook.getTitle().isEmpty())
+                throw new InvalidArgumentException("Title cannot be empty!");
             oldBook.setTitle(newBook.getTitle());
-
-        if(newBook.getAvailableCopies() != null && newBook.getAvailableCopies() >= 0)
-            oldBook.setAvailableCopies(newBook.getAvailableCopies());
-
-        if(newBook.getTotalCopies() != null && newBook.getTotalCopies() >= 0)
-            oldBook.setTotalCopies(newBook.getTotalCopies());
-
-        if(newBook.getDatePurchased() != null && (newBook.getDatePurchased().isBefore(LocalDate.now()) || newBook.getDatePurchased().isEqual(LocalDate.now())))
-            oldBook.setDatePurchased(newBook.getDatePurchased());
-
-        if(newBook.getAuthors() != null && !newBook.getAuthors().isEmpty())
-            oldBook.setAuthors(newBook.getAuthors());
-        else if(newBook.getAuthorIds() != null && !newBook.getAuthorIds().isEmpty()) {
-            List<Author> authors = new ArrayList<>();
-            newBook.getAuthorIds().forEach((authorId) -> {
-                authors.add(authorService.getAuthorById(authorId));
-            });
-            oldBook.setAuthors(authors);
-
         }
+
+        if(newBook.getTotalCopies() != null) {
+            if(newBook.getTotalCopies() < 0)
+                throw new InvalidArgumentException("Total Copies cannot be less than zero!");
+            oldBook.setTotalCopies(newBook.getTotalCopies());
+        }
+
+        if(newBook.getAvailableCopies() != null) {
+            if(newBook.getAvailableCopies() < 0)
+                throw new InvalidArgumentException("Available Copies cannot be less than zero!");
+            if (newBook.getAvailableCopies() > oldBook.getTotalCopies())
+                throw new InvalidArgumentException("Available Copies cannot be more than total copies!");
+            oldBook.setAvailableCopies(newBook.getAvailableCopies());
+        }
+
+        if(newBook.getDatePurchased() != null) {
+            if(newBook.getDatePurchased().isAfter(LocalDate.now()))
+                throw new InvalidArgumentException("Date purchased must be less than or equal to the current date!");
+            oldBook.setDatePurchased(newBook.getDatePurchased());
+        }
+
+        //JSON ignores the "books" attribute, hence the reason why "bookIsbns" is used
+        //JSON also uses the empty constructor while parsing, meaning "books"/"bookIsbns" cannot be null, hence the
+        //reason why checking if they're null is skipped
+        if (!newBook.getAuthorIds().isEmpty()) {
+            Set<Author> authors = new LinkedHashSet<>();
+            if(newBook.getAuthorIds().get(0).equals("..."))
+                authors.addAll(oldBook.getAuthors());
+            else if(newBook.getAuthorIds().get(0).equals("-")) {
+                List<String> authorsToRemove = newBook.getAuthorIds().subList(1, newBook.getAuthorIds().size());
+                authors.addAll(oldBook.getAuthors());
+                authors.removeIf(author -> (authorsToRemove.contains(author.getId().toString())));
+            }
+            newBook.getAuthorIds().forEach((authorId) -> {
+                if(!authorId.equals("...") && !newBook.getAuthorIds().contains("-"))
+                    authors.add(authorService.getAuthorById(Integer.parseInt(authorId)));
+            });
+            System.out.println("Authors: " + authors);
+            oldBook.setAuthors(List.copyOf(authors));
+            oldBook.setAuthorIds(new ArrayList<>());
+        }
+        else
+            oldBook.setAuthors(new ArrayList<>());
 
         return bookRepository.save(oldBook);
     }

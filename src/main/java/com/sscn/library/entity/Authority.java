@@ -20,13 +20,19 @@ public class Authority
   @JoinColumn(referencedColumnName = "username", nullable = false, name = "username")
   private User user;
 
+  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private String authority;
+  private UserRole authority;
 
-  public Authority(User user, String authority)
+  public Authority(User user, UserRole authority)
   {
     this.user = user;
     this.authority = authority;
+  }
+
+  public Authority(User user, String authority) {
+    this.user = user;
+    this.authority = UserRole.valueOf(authority);
   }
 
   @Override

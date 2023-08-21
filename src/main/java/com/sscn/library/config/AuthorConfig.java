@@ -12,11 +12,11 @@ public class AuthorConfig {
 
     CommandLineRunner runner (AuthorRepository authorRepository) {
         return args -> {
-            Author john = new Author("John", "Doe");
-            Author lettuce = new Author("Lettuce", "Correl");
-            Author mary = new Author("Mary", "Doe");
+//            Author john = new Author("John", "Doe");
+//            Author lettuce = new Author("Lettuce", "Correl");
+//            Author mary = new Author("Mary", "Doe");
 
-            authorRepository.saveAll(List.of(john, lettuce, mary));
+//            authorRepository.saveAll(List.of(john, lettuce, mary));
         };
     };
 }

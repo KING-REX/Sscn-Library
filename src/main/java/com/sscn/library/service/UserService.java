@@ -32,9 +32,22 @@ public class UserService implements UserDetailsService
   public User addUser(User user)
   {
     if(userRepository.findByUsername(user.getUsername()).isPresent())
-      throw new DuplicateValueException("User email %s exists".formatted(user.getUsername()));
+      throw new DuplicateValueException("User %s already exists".formatted(user.getUsername()));
 
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     return userRepository.save(user);
+  }
+
+  public void removeUser(String username)
+  {
+    removeUser(userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User %s doesn't exist.".formatted(username))));
+  }
+
+  public void removeUser(User user)
+  {
+    if(userRepository.findByUsername(user.getUsername()).isEmpty())
+      throw new NotFoundException("User %s doesn't exist".formatted(user.getUsername()));
+
+    userRepository.delete(user);
   }
 }

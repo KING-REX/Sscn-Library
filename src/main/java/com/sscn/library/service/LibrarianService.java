@@ -58,17 +58,30 @@ public class LibrarianService {
         else if(librarian.getId() != null)
             throw new InvalidArgumentException("Librarian Id is auto-generated. Don't give it a value!");
 
-        if(librarian.getFirstName() == null || librarian.getFirstName().isEmpty())
-            throw new InvalidArgumentException("First name attribute is invalid!");
+        if(librarian.getFirstName() == null)
+            throw new InvalidArgumentException("First name cannot be null!");
+        else if(librarian.getFirstName().isEmpty())
+            throw new InvalidArgumentException("First name cannot be empty!");
 
-        if(librarian.getLastName() == null || librarian.getLastName().isEmpty())
-            throw new InvalidArgumentException("Last name attribute is invalid!");
+
+        if(librarian.getLastName() == null)
+            throw new InvalidArgumentException("Last name cannot be null!");
+        else if(librarian.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name cannot be empty!");
 
         if(librarian.getPassword() == null)
+            throw new InvalidArgumentException("Password cannot be null!");
+        else if(librarian.getPassword().isEmpty())
             throw new InvalidArgumentException("Password cannot be empty!");
 
-        if(librarian.getEmail() != null && librarianRepository.existsByEmail(librarian.getEmail()))
-            throw new DuplicateValueException("Librarian with email %s already exists.".formatted(librarian.getEmail()));
+        if(librarian.getEmail() != null) {
+            if(librarianRepository.existsByEmail(librarian.getEmail()))
+                throw new DuplicateValueException("Librarian with email %s already exists.".formatted(librarian.getEmail()));
+            else if(librarian.getEmail().isEmpty())
+                throw new InvalidArgumentException("Email cannot be empty!");
+        }
+        else
+            throw new InvalidArgumentException("Email cannot be null!");
 
 
         return librarianRepository.save(librarian);
@@ -83,12 +96,25 @@ public class LibrarianService {
     public Librarian updateLibrarian(Librarian newLibrarian, Integer id) {
         Librarian oldLibrarian = getLibrarianById(id);
 
-        if(newLibrarian.getFirstName() != null && !newLibrarian.getFirstName().isEmpty())
+        if(newLibrarian.getFirstName() != null) {
+            if(newLibrarian.getFirstName().isEmpty())
+                throw new InvalidArgumentException("First name cannot be empty!");
             oldLibrarian.setFirstName(newLibrarian.getFirstName());
-        if(newLibrarian.getLastName() != null && !newLibrarian.getLastName().isEmpty())
+        }
+
+        if(newLibrarian.getLastName() != null) {
+            if(newLibrarian.getLastName().isEmpty())
+                throw new InvalidArgumentException("Last name cannot be empty!");
             oldLibrarian.setLastName(newLibrarian.getLastName());
-        if(newLibrarian.getEmail() != null && !newLibrarian.getEmail().isEmpty() && !librarianRepository.existsByEmail(newLibrarian.getEmail()))
+        }
+
+        if(newLibrarian.getEmail() != null) {
+            if(newLibrarian.getEmail().isEmpty())
+                throw new InvalidArgumentException("Email cannot be empty!");
+            else if(librarianRepository.existsByEmail(newLibrarian.getEmail()))
+                throw new DuplicateValueException("Librarian with email %s already exists.".formatted(newLibrarian.getEmail()));
             oldLibrarian.setEmail(newLibrarian.getEmail());
+        }
 
         if(newLibrarian.getPassword() != null && !newLibrarian.getPassword().isEmpty()) {
 

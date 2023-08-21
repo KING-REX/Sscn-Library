@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Data
 @Entity
-public class Author implements Serializable {
+public class Author implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +63,30 @@ public class Author implements Serializable {
 
     public void fillInBookIsbns() {
         this.books.forEach((book) -> this.bookIsbns.add(book.getIsbn()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Author author = (Author) o;
+
+        if (!id.equals(author.id)) return false;
+        if (!firstName.equals(author.firstName)) return false;
+        if (!lastName.equals(author.lastName)) return false;
+        if (!books.equals(author.books)) return false;
+        return bookIsbns.equals(author.bookIsbns);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + books.hashCode();
+        result = 31 * result + bookIsbns.hashCode();
+        return result;
     }
 
     public static Author of(Integer id) {
@@ -129,5 +153,10 @@ public class Author implements Serializable {
     public List<String> getBookIsbns() {
         this.fillInBookIsbns();
         return this.bookIsbns;
+    }
+
+    @Override
+    public Author clone() throws CloneNotSupportedException {
+        return (Author) super.clone();
     }
 }

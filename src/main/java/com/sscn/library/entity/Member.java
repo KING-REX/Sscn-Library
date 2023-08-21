@@ -16,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Entity
-public class  Member implements Serializable {
+public class Member implements Serializable, Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,4 +32,9 @@ public class  Member implements Serializable {
     @Email(message = "Email is invalid!", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Override
+    public Member clone() throws CloneNotSupportedException {
+        return (Member) super.clone();
+    }
 }

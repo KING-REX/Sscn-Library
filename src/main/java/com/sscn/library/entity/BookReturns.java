@@ -11,41 +11,45 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Entity
-public class BookReturns {
+public class BookReturns implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(referencedColumnName = "isbn", nullable = false)
-    private Book bookIssued;
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "isbn", nullable = false, name = "book_returned")
+    private Book bookReturned;
 
-    @JsonProperty("bookIssued")
+    @JsonProperty("bookReturned")
     @Transient
     private String bookIsbn;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id", nullable = false, name = "book_issuance")
     private BookIssuance bookIssuance;
 
     @JsonProperty("bookIssuance")
     @Transient
     private Integer bookIssuanceId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReturnStatus returnStatus;
+
     @Column(nullable = false)
     private LocalDate dateReturned;
 
     public void fillInBookIsbn() {
-        this.setBookIsbn(this.getBookIssued().getIsbn());
+        this.setBookIsbn(this.getBookReturned().getIsbn());
     }
 
     public void fillInBookIssuanceId() {
         this.setBookIssuanceId(this.getBookIssuance().getId());
     }
 
-    @JsonProperty("bookIssued")
+    @JsonProperty("bookReturned")
     public String getBookIssuedIsbn() {
         this.fillInBookIsbn();
         return this.getBookIsbn();
@@ -56,4 +60,11 @@ public class BookReturns {
         this.fillInBookIssuanceId();
         return this.getBookIssuanceId();
     }
+
+    @Override
+    public BookReturns clone() throws CloneNotSupportedException {
+        return (BookReturns) super.clone();
+    }
+
+    //TODO: Make this class implement the Serializable interface. I just removed it to test whether jpa can do without serializing.
 }

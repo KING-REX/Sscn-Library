@@ -17,7 +17,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Book implements Serializable {
+public class Book implements Serializable, Cloneable {
     @Id
     @NotNull(message = "ISBN is mandatory!")
     private String isbn;
@@ -40,7 +40,18 @@ public class Book implements Serializable {
 
     @JsonProperty("authors")
     @Transient
-    private List<Integer> authorIds;
+    private List<String> authorIds;
+
+    //TODO: Do the json workaround for object printing (like how you did for the authors) and make it print an array of bookIssuance ids, not the
+    // actual bookIssuance objects!
+    @JsonIgnore
+    @OneToMany(mappedBy = "bookIssued", cascade = CascadeType.ALL)
+    private List<BookIssuance> bookIssuances;
+
+    //TODO: Do the json workaround thing for this attribute too! Then you can remove the jsonIgnore!
+    @JsonIgnore
+    @OneToMany(mappedBy = "bookReturned", cascade = CascadeType.ALL)
+    private List<BookReturns> bookReturns;
 
     public Book(String isbn, String title, LocalDate datePurchased, Integer availableCopies, Integer totalCopies) {
         this.isbn = isbn;
@@ -60,7 +71,7 @@ public class Book implements Serializable {
         this.totalCopies = totalCopies;
         this.authors = authors;
         this.authorIds = new ArrayList<>();
-        authors.forEach((author) -> this.authorIds.add(author.getId()));
+        authors.forEach((author) -> this.authorIds.add(author.getId().toString()));
     }
 
     public Book() {
@@ -81,11 +92,39 @@ public class Book implements Serializable {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
-        authors.forEach((author) -> this.authorIds.add(author.getId()));
+        authors.forEach((author) -> this.authorIds.add(author.getId().toString()));
     }
 
     public void fillInAuthorIds() {
-        this.authors.forEach((author) -> this.authorIds.add(author.getId()));
+        this.authors.forEach((author) -> this.authorIds.add(author.getId().toString()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (!isbn.equals(book.isbn)) return false;
+        if (!title.equals(book.title)) return false;
+        if (!datePurchased.equals(book.datePurchased)) return false;
+        if (!availableCopies.equals(book.availableCopies)) return false;
+        if (!totalCopies.equals(book.totalCopies)) return false;
+        if (!authors.equals(book.authors)) return false;
+        return authorIds.equals(book.authorIds);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = isbn.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + datePurchased.hashCode();
+        result = 31 * result + availableCopies.hashCode();
+        result = 31 * result + totalCopies.hashCode();
+        result = 31 * result + authors.hashCode();
+        result = 31 * result + authorIds.hashCode();
+        return result;
     }
 
     public static Book of(String isbn) {
@@ -110,8 +149,13 @@ public class Book implements Serializable {
 //    }
 
     @JsonProperty("authors")
-    public List<Integer> getAuthorIds() {
+    public List<String> getAuthorIds() {
         this.fillInAuthorIds();
         return this.authorIds;
+    }
+
+    @Override
+    public Book clone() throws CloneNotSupportedException {
+        return (Book) super.clone();
     }
 }

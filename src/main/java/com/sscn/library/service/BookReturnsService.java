@@ -3,26 +3,23 @@ package com.sscn.library.service;
 import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
 import com.sscn.library.entity.BookReturns;
+import com.sscn.library.entity.ReturnStatus;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.InvalidArgumentException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.repository.BookReturnsRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class BookReturnsService {
     private final BookReturnsRepository bookReturnsRepository;
     private final BookService bookService;
     private final BookIssuanceService bookIssuanceService;
-
-    public BookReturnsService(BookReturnsRepository bookReturnsRepository, BookService bookService, BookIssuanceService bookIssuanceService) {
-        this.bookReturnsRepository = bookReturnsRepository;
-        this.bookService = bookService;
-        this.bookIssuanceService = bookIssuanceService;
-    }
 
     public List<BookReturns> getAllBookReturns() {
         return bookReturnsRepository.findAll();
@@ -33,7 +30,7 @@ public class BookReturnsService {
     }
 
     public List<BookReturns> getBookReturnsByBookIssued(Book bookIssued) {
-        return bookReturnsRepository.findAllByBookIssued(bookIssued).orElseThrow(() -> new NotFoundException("Book Returns for book %s does not exist.".formatted(bookIssued.getIsbn())));
+        return bookReturnsRepository.findAllByBookReturned(bookIssued).orElseThrow(() -> new NotFoundException("Book Returns for book %s does not exist.".formatted(bookIssued.getIsbn())));
     }
 
     public List<BookReturns> getBookReturnsByBookIsbn(String isbn) {
@@ -48,6 +45,10 @@ public class BookReturnsService {
         return getBookReturnsByBookIssuance(bookIssuanceService.getBookIssuanceById(id));
     }
 
+    public List<BookReturns> getBookReturnsByReturnStatus(ReturnStatus returnStatus) {
+        return bookReturnsRepository.findAllByReturnStatus(returnStatus).orElseThrow(() -> new NotFoundException("Book Returns with status %s does not exist.".formatted(returnStatus)));
+    }
+
     public List<BookReturns> getBookReturnsByDateReturned(LocalDate dateReturned) {
         return bookReturnsRepository.findAllByDateReturned(dateReturned).orElseThrow(() -> new NotFoundException("Book Returns on %s does not exist.".formatted(dateReturned)));
     }
@@ -58,9 +59,9 @@ public class BookReturnsService {
         else if(bookReturns.getId() != null)
             throw new InvalidArgumentException("Book Returns Id is auto-generated. Don't give it a value!");
 
-        if(bookReturns.getBookIssued() == null) {
+        if(bookReturns.getBookReturned() == null) {
             if(bookReturns.getBookIsbn() != null && !bookReturns.getBookIsbn().isEmpty())
-                bookReturns.setBookIssued(bookService.getBookByIsbn(bookReturns.getBookIsbn()));
+                bookReturns.setBookReturned(bookService.getBookByIsbn(bookReturns.getBookIsbn()));
             else
                 throw new InvalidArgumentException("Book Issued Isbn is invalid!");
         }
@@ -87,10 +88,10 @@ public class BookReturnsService {
     public BookReturns updateBookReturns(BookReturns newBookReturns, Integer id) {
         BookReturns oldBookReturns = getBookReturnById(id);
 
-        if(newBookReturns.getBookIssued() != null && newBookReturns.getBookIssued().getIsbn() != null)
-            oldBookReturns.setBookIssued(newBookReturns.getBookIssued());
+        if(newBookReturns.getBookReturned() != null && newBookReturns.getBookReturned().getIsbn() != null)
+            oldBookReturns.setBookReturned(newBookReturns.getBookReturned());
         else if(newBookReturns.getBookIsbn() != null && !newBookReturns.getBookIsbn().isEmpty())
-            oldBookReturns.setBookIssued(bookService.getBookByIsbn(newBookReturns.getBookIsbn()));
+            oldBookReturns.setBookReturned(bookService.getBookByIsbn(newBookReturns.getBookIsbn()));
 
         if(newBookReturns.getBookIssuance() != null && newBookReturns.getBookIssuance().getId() != null)
             oldBookReturns.setBookIssuance(newBookReturns.getBookIssuance());
@@ -129,6 +130,10 @@ public class BookReturnsService {
 
     public void deleteBookReturnsByDateReturned(LocalDate dateReturned) {
         getBookReturnsByDateReturned(dateReturned).forEach(this::deleteBookReturns);
+    };
+
+    public void deleteBookReturnsByReturnStatus(ReturnStatus returnStatus) {
+        getBookReturnsByReturnStatus(returnStatus).forEach(this::deleteBookReturns);
     };
 
     public void deleteAllBookReturns() {

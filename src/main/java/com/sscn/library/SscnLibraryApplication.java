@@ -22,10 +22,13 @@ import java.util.Optional;
 public class SscnLibraryApplication {
 
 	@Bean
-	CommandLineRunner runner(UserRepository userRepository) {
+	CommandLineRunner runner(UserService userService) {
 
 		return args -> {
 //			User user = new User("admin", "secret", "ADMIN");
+//			userService.addUser(user);
+
+//			userService.removeUser("admin");
 		};
 	}
 	public static void main(String[] args) {

@@ -1,13 +1,10 @@
 package com.sscn.library.controller;
 
-import com.sscn.library.entity.Book;
 import com.sscn.library.entity.BookIssuance;
-import com.sscn.library.entity.Member;
-import com.sscn.library.entity.ReturnStatus;
+import com.sscn.library.entity.BorrowStatus;
 import com.sscn.library.exception.DuplicateValueException;
 import com.sscn.library.exception.NotFoundException;
 import com.sscn.library.service.BookIssuanceService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/bookIssuance")
+@RequestMapping("api/v1/bookIssuances")
 public class BookIssuanceController {
 
     private final BookIssuanceService bookIssuanceService;
@@ -55,6 +52,11 @@ public class BookIssuanceController {
         return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByMemberId(memberId));
     }
 
+    @GetMapping("/{copiesIssued}.ci")
+    public ResponseEntity<List<BookIssuance>>  getBookIssuancesByCopiesIssued(@PathVariable Integer copiesIssued) throws NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.getBookIssuancesByCopiesIssued(copiesIssued));
+    }
+
 
 //    @PostMapping("/member")
 //    public List<BookIssuance> getBookIssuancesByMember(@RequestBody Member issuedTo) {
@@ -67,49 +69,47 @@ public class BookIssuanceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookIssuance>  updateBookIssuance(@RequestBody BookIssuance newBookIssuance, @PathVariable Integer id) throws NotFoundException, IllegalArgumentException {
+    public ResponseEntity<BookIssuance>  updateBookIssuance(@RequestBody BookIssuance newBookIssuance, @PathVariable Integer id) throws NotFoundException, IllegalArgumentException, CloneNotSupportedException {
         return ResponseEntity.ok(bookIssuanceService.updateBookIssuance(newBookIssuance, id));
     }
 
     @DeleteMapping
-    public ResponseEntity.BodyBuilder deleteAllBookIssuances() {
-        bookIssuanceService.deleteAllBookIssuances();
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteAllBookIssuances() throws UnsupportedOperationException {
+        return ResponseEntity.ok(bookIssuanceService.deleteAllBookIssuances());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity.BodyBuilder deleteBookIssuanceById(@PathVariable Integer id) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuanceById(id);
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteBookIssuanceById(@PathVariable Integer id) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuanceById(id));
     }
 
     @DeleteMapping("/{bookIsbn}.i")
-    public ResponseEntity.BodyBuilder deleteBookIssuancesByBookIsbn(@PathVariable String bookIsbn) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuancesByBookIsbn(bookIsbn);
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteBookIssuancesByBookIsbn(@PathVariable String bookIsbn) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByBookIsbn(bookIsbn));
     }
 
     @DeleteMapping("/{dateIssued}.di")
-    public ResponseEntity.BodyBuilder deleteBookIssuancesByDateIssued(@PathVariable LocalDate dateIssued) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuancesByDateIssued(dateIssued);
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteBookIssuancesByDateIssued(@PathVariable LocalDate dateIssued) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByDateIssued(dateIssued));
     }
 
     @DeleteMapping("/{dateDue}.dd")
-    public ResponseEntity.BodyBuilder deleteBookIssuancesByDateDue(@PathVariable LocalDate dateDue) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuancesByDateDue(dateDue);
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteBookIssuancesByDateDue(@PathVariable LocalDate dateDue) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByDateDue(dateDue));
     }
 
     @DeleteMapping("/{memberId}.mi")
-    public ResponseEntity.BodyBuilder deleteBookIssuancesByMemberId(@PathVariable Integer memberId) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuancesByMemberId(memberId);
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteBookIssuancesByMemberId(@PathVariable Integer memberId) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByMemberId(memberId));
     }
 
-    @DeleteMapping("/{returnStatus}.rs")
-    public ResponseEntity.BodyBuilder deleteBookIssuancesByReturnStatus(@PathVariable ReturnStatus returnStatus) throws IllegalArgumentException, NotFoundException {
-        bookIssuanceService.deleteBookIssuancesByReturnStatus(returnStatus);
-        return ResponseEntity.ok();
+    @DeleteMapping("/{copiesIssued}.ci")
+    public ResponseEntity<Boolean> deleteBookIssuancesByCopiesIssued(@PathVariable Integer copiesIssued) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByCopiesIssued(copiesIssued));
+    }
+
+    @DeleteMapping("/{borrowStatus}.rs")
+    public ResponseEntity<Boolean> deleteBookIssuancesByBorrowStatus(@PathVariable BorrowStatus borrowStatus) throws UnsupportedOperationException, IllegalArgumentException, NotFoundException {
+        return ResponseEntity.ok(bookIssuanceService.deleteBookIssuancesByBorrowStatus(borrowStatus));
     }
 }

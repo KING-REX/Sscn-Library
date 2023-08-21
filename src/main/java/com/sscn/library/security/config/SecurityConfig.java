@@ -1,5 +1,6 @@
 package com.sscn.library.security.config;
 
+import com.sscn.library.security.filter.CookieAuthenticationFilter;
 import com.sscn.library.security.filter.JwtAuthenticationFilter;
 import com.sscn.library.service.UserPasswordService;
 import com.sscn.library.service.UserService;
@@ -36,6 +37,7 @@ public class SecurityConfig
     private final UserService userService;
     private final UserPasswordService userPasswordService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CookieAuthenticationFilter cookieAuthenticationFilter;
     private final DaoAuthenticationProvider authenticationProvider;
 
 
@@ -45,9 +47,12 @@ public class SecurityConfig
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/login", "/api/v1/auth/**", "/api/v1/authors").permitAll();
+//                    auth.requestMatchers("/login", "/api/v1/auth/**", "/api/v1/authors").permitAll();
 //                    auth.requestMatchers("/api/**").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();
+//                    auth.anyRequest().authenticated();
+
+
+                    auth.anyRequest().permitAll();
                 })
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> {
@@ -55,6 +60,7 @@ public class SecurityConfig
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(cookieAuthenticationFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling(exception -> {
                     exception.authenticationEntryPoint((request, response, authException) -> {
 //                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

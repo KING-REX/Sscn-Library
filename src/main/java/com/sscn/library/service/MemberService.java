@@ -59,13 +59,24 @@ public class MemberService {
         if(member.getId() != null && memberRepository.existsById(member.getId()))
             throw new DuplicateValueException("Librarian %s already exists.".formatted(member.getId()));
         else if(member.getId() != null)
-            throw new InvalidArgumentException("Mamber Id is auto-generated. Don't give it a value!");
+            throw new InvalidArgumentException("Member Id is auto-generated. Don't give it a value!");
 
-        if(member.getFirstName() == null || member.getFirstName().isEmpty())
-            throw new InvalidArgumentException("First name attribute is invalid!");
+        if(member.getFirstName() == null)
+            throw new InvalidArgumentException("First name cannot be null!");
+        else if(member.getFirstName().isEmpty())
+            throw new InvalidArgumentException("First name cannot be empty!");
 
-        if(member.getLastName() == null || member.getLastName().isEmpty())
-            throw new InvalidArgumentException("Last name attribute is invalid!");
+        if(member.getLastName() == null)
+            throw new InvalidArgumentException("Last name cannot be null!");
+        else if(member.getLastName().isEmpty())
+            throw new InvalidArgumentException("Last name cannot be empty!");
+
+        if(member.getEmail() == null)
+            throw new InvalidArgumentException("Email cannot be null!");
+        else if(member.getEmail().isEmpty())
+            throw new InvalidArgumentException("Email cannot be empty!");
+        else if(memberRepository.existsByEmail(member.getEmail()))
+            throw new InvalidArgumentException("Email %s already exists!".formatted(member.getEmail()));
 
         return memberRepository.save(member);
     }
@@ -80,15 +91,21 @@ public class MemberService {
 
 //        System.out.println(oldMember);
 
-        if(newMember.getFirstName() != null && !newMember.getFirstName().isEmpty()){
+        if(newMember.getFirstName() != null){
+            if(newMember.getFirstName().isEmpty())
+                throw new InvalidArgumentException("First name cannot be empty!");
             oldMember.setFirstName(newMember.getFirstName());
         }
 
-        if(newMember.getLastName() != null && !newMember.getLastName().isEmpty()){
+        if(newMember.getLastName() != null){
+            if(newMember.getLastName().isEmpty())
+                throw new InvalidArgumentException("Last name cannot be empty!");
             oldMember.setLastName(newMember.getLastName());
         }
 
-        if(newMember.getEmail() != null && !newMember.getEmail().isEmpty()){
+        if(newMember.getEmail() != null){
+            if(newMember.getEmail().isEmpty())
+                throw new InvalidArgumentException("Email cannot be empty!");
             oldMember.setEmail(newMember.getEmail());
         }
 

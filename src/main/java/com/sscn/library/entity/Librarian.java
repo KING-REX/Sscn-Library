@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Entity
-public class Librarian implements Serializable {
+public class Librarian implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +37,9 @@ public class Librarian implements Serializable {
     @Valid()
     @Column(nullable = false)
     private String password;
+
+    @Override
+    public Librarian clone() throws CloneNotSupportedException {
+        return (Librarian) super.clone();
+    }
 }

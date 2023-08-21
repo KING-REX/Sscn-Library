@@ -22,7 +22,7 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
     public static final String COOKIE_NAME = "token";
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.printf("Cookies is %snull", request.getCookies() != null ? "not " : "");
+        System.out.printf("Cookies is %snull%n", request.getCookies() != null ? "not " : "");
         response.getHeaderNames().forEach(headerName -> System.out.println("Header: " + response.getHeader(headerName)));
 
         Stream.of(Optional.ofNullable(request.getCookies())
